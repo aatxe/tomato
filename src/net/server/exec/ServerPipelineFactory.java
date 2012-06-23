@@ -7,6 +7,12 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
+/**
+ * A <code>ChannelPipelineFactory</code> for server instances.
+ * @author tomato
+ * @version 1.0
+ * @since alpha
+ */
 public class ServerPipelineFactory implements ChannelPipelineFactory {
 	@Override
 	public ChannelPipeline getPipeline() {

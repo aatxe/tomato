@@ -4,10 +4,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import tools.ConsoleOutput;
 
+/**
+ * A <code>ByteInputStream</code> wrapping an <code>InputStream</code>.
+ * @author tomato
+ * @version 1.0
+ * @since alpha
+ */
 public class InputStreamByteStream implements ByteInputStream {
 	private InputStream is;
 	private long bytesRead = 0;
 
+	/**
+	 * Creates a byte stream wrapping an <code>InputStream</code>.
+	 * @param is the <code>InputStream</code> to wrap the byte stream around
+	 */
 	public InputStreamByteStream(InputStream is) {
 		this.is = is;
 	}

@@ -3,20 +3,37 @@ package tools.data.output;
 import java.awt.Point;
 import java.nio.charset.Charset;
 
+/**
+ * A generic <code>LittleEndianWriter</code> wrapping a <code>ByteOutputStream</code>.
+ * @author tomato
+ * @version 1.0
+ * @since alpha
+ */
 public class GenericLittleEndianWriter implements LittleEndianWriter {
 	private static final Charset ASCII_Charset = Charset.forName("US-ASCII");
 	private ByteOutputStream bos;
 
+	/**
+	 * Creates a <code>LittleEndianWriter</code> wrapping a <code>ByteOutputStream</code>.
+	 * @param bos the <code>ByteOutputStream</code> for wrapping
+	 */
 	public GenericLittleEndianWriter(ByteOutputStream bos) {
 		super();
 		this.bos = bos;
 	}
 
+	/**
+	 * Creates an empty <code>LittleEndianWriter</code>.
+	 */
 	protected GenericLittleEndianWriter() {
 		this.bos = null;
 	}
 
-	void setByteOutputStream(ByteOutputStream bos) {
+	/**
+	 * Sets the <code>ByteOutputStream</code> to be used by the writer.
+	 * @param bos the <code>ByteOutputStream</code> to be wrapped by the writer
+	 */
+	protected void setByteOutputStream(ByteOutputStream bos) {
 		this.bos = bos;
 	}
 

@@ -6,18 +6,26 @@ import java.util.concurrent.Executors;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.ChannelGroupFuture;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
+/**
+ * A basic bootstrapper for instances of the server.
+ * @author tomato
+ * @version 1.0
+ * @since 0.1
+ */
 public class ServerBootstrapper {
 	private final ChannelGroup bindings = new DefaultChannelGroup("server-bindings");
 	private ChannelFactory factory;
 	private ServerBootstrap bootstrap;
 	private ServerPipelineFactory defaultPipelineFactory = new ServerPipelineFactory();
 	
+	/**
+	 * Creates a bootstrapper for the server.
+	 */
 	public ServerBootstrapper() {
 		factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
 		bootstrap = new ServerBootstrap(factory);
@@ -26,30 +34,56 @@ public class ServerBootstrapper {
 		bootstrap.setOption("child.keepAlive", true);
 	}
 	
+	/**
+	 * Binds a login server to the specified port.
+	 * @param portNumber the port number to bind
+	 */
 	public void bind(int portNumber) {
 		this.bind(new InetSocketAddress(portNumber));
 	}
 	
+	/**
+	 * Binds a login server to the specified port.
+	 * @param port the socket address to bind
+	 */
 	public void bind(SocketAddress port) {
 		Channel ch = bootstrap.bind(port);
 		bindings.add(ch);
 	}
 	
-	public void bind(int portNumber, ChannelPipelineFactory pipelineFactory) {
+	/**
+	 * Binds a server from the specified <code>ServerPipelineFactory</code> to the specified port.
+	 * @param portNumber the port number to bind
+	 * @param pipelineFactory the <code>ServerPipelineFactory</code> to bind from
+	 */
+	public void bind(int portNumber, ServerPipelineFactory pipelineFactory) {
 		this.bind(new InetSocketAddress(portNumber), pipelineFactory);
 	}
 	
-	public void bind(SocketAddress port, ChannelPipelineFactory pipelineFactory) {
+
+	/**
+	 * Binds a server from the specified <code>ServerPipelineFactory</code> to the specified port.
+	 * @param port the socket address to bind
+	 * @param pipelineFactory the <code>ServerPipelineFactory</code> to bind from
+	 */
+	public void bind(SocketAddress port, ServerPipelineFactory pipelineFactory) {
 		bootstrap.setPipelineFactory(pipelineFactory);
 		Channel ch = bootstrap.bind(port);
 		bindings.add(ch);
 		bootstrap.setPipelineFactory(defaultPipelineFactory);
 	}
 	
+	/**
+	 * Unbinds all servers bound to all ports.
+	 * @return a ChannelGroupFuture of the unbinding event
+	 */
 	public ChannelGroupFuture unbind() {
 		return bindings.close();
 	}
 	
+	/**
+	 * Shutdowns the server entirely.
+	 */
 	public void shutdown() {
 		ChannelGroupFuture cgf = this.unbind();
 		cgf.awaitUninterruptibly();

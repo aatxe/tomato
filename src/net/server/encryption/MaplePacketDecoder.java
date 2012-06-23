@@ -8,6 +8,12 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 import client.MapleClient;
 
+/**
+ * A one-to-one decoder for converting an encrypted <code>ChannelBuffer</code> to a <code>MaplePacket</code>.
+ * @author tomato
+ * @version 1.0
+ * @since alpha
+ */
 public class MaplePacketDecoder extends OneToOneDecoder {
 	@Override
 	public Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {

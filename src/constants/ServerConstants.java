@@ -1,5 +1,11 @@
 package constants;
 
+/**
+ * Constants for the Server, useful for configuration.
+ * @author tomato
+ * @version 1.0
+ * @since alpha
+ */
 public class ServerConstants {
 	public static final short MAJOR_VERSION = 83;
 	public static final short MINOR_VERSION = 1;

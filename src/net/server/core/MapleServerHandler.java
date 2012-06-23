@@ -19,6 +19,12 @@ import tools.data.input.SeekableLittleEndianAccessor;
 import client.MapleClient;
 import constants.ServerConstants;
 
+/**
+ * A Netty handler for Server NIO.
+ * @author tomato
+ * @version 1.0
+ * @since alpha
+ */
 public class MapleServerHandler extends SimpleChannelHandler {
 	ChannelGroup connections = new DefaultChannelGroup("client-connections");
 	

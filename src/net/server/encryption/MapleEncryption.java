@@ -1,12 +1,30 @@
 package net.server.encryption;
 
+/**
+ * A tool for encryption and decryption of packets.
+ * @author tomato
+ * @version 1.0
+ * @since alpha
+ */
 public class MapleEncryption {
+	/**
+	 * Shifts a byte to the left by the specified amount, rolling over any excess.
+	 * @param in the byte to be shifted
+	 * @param count the amount to shift it by
+	 * @return the shifted byte
+	 */
 	private static byte rollLeft(byte in, int count) {
 		int tmp = (int) in & 0xFF;
 		tmp = tmp << (count % 8);
 		return (byte) ((tmp & 0xFF) | (tmp >> 8));
 	}
 
+	/**
+	 * Shifts a byte to the right by the specified amount, rolling over any excess.
+	 * @param in the byte to be shifted
+	 * @param count the amount to shift it by
+	 * @return the shifted byte
+	 */
 	private static byte rollRight(byte in, int count) {
 		int tmp = (int) in & 0xFF;
 		tmp = (tmp << 8) >>> (count % 8);
@@ -14,6 +32,11 @@ public class MapleEncryption {
 		return (byte) ((tmp & 0xFF) | (tmp >>> 8));
 	}
 
+	/**
+	 * Encrypts an array of bytes.
+	 * @param data the array of bytes to be encrypted
+	 * @return the encrypted array of bytes
+	 */
 	public static byte[] encryptData(byte data[]) {
 		for (int j = 0; j < 6; j++) {
 			byte remember = 0;
@@ -48,6 +71,11 @@ public class MapleEncryption {
 		return data;
 	}
 
+	/**
+	 * Decrypts an array of bytes.
+	 * @param data the array of bytes to be decrypted
+	 * @return the decrypted array of bytes
+	 */
 	public static byte[] decryptData(byte data[]) {
 		for (int j = 1; j <= 6; j++) {
 			byte remember = 0;

@@ -3,9 +3,19 @@ package tools.data.input;
 import java.awt.Point;
 import java.io.ByteArrayOutputStream;
 
+/**
+ * A <code>LittleEndianAccessor</code> wrapping a <code>ByteInputStream</code>.
+ * @author tomato
+ * @version 1.0
+ * @since alpha
+ */
 public class GenericLittleEndianAccessor implements LittleEndianAccessor {
 	private ByteInputStream bs;
 
+	/**
+	 * Creates a new generic <code>LittleEndianAccessor</code>.
+	 * @param bs the <code>ByteInputStream</code> for the accessor to wrap
+	 */
 	public GenericLittleEndianAccessor(ByteInputStream bs) {
 		this.bs = bs;
 	}
@@ -52,7 +62,8 @@ public class GenericLittleEndianAccessor implements LittleEndianAccessor {
 		return Double.longBitsToDouble(readLong());
 	}
 
-	public final String readAsciiString(int n) {
+	@Override
+	public String readAsciiString(int n) {
 		char ret[] = new char[n];
 		for (int x = 0; x < n; x++) {
 			ret[x] = (char) readByte();
@@ -60,7 +71,8 @@ public class GenericLittleEndianAccessor implements LittleEndianAccessor {
 		return String.valueOf(ret);
 	}
 	
-	public final String readNullTerminatedAsciiString() {
+	@Override
+	public String readNullTerminatedAsciiString() {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		byte b;
 		while (true) {
@@ -78,6 +90,7 @@ public class GenericLittleEndianAccessor implements LittleEndianAccessor {
 		return String.valueOf(chrBuf);
 	}
 
+	@Override
 	public long getBytesRead() {
 		return bs.getBytesRead();
 	}

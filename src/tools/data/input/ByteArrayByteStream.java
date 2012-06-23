@@ -3,6 +3,12 @@ package tools.data.input;
 import java.io.IOException;
 import tools.HexTool;
 
+/**
+ * A <code>SeekableInputStreamBytestream</code> wrapping a byte array.
+ * @author tomato
+ * @version 1.0
+ * @since alpha
+ */
 public class ByteArrayByteStream implements SeekableInputStreamBytestream {
 	private int pos = 0;
 	private long bytesRead = 0;

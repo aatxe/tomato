@@ -2,33 +2,67 @@ package tools;
 
 import java.io.Serializable;
 
+/**
+ * A pair of three objects, based on generics.
+ * @author tomato
+ * @version 1.0
+ * @param <E> the type of the left object
+ * @param <F> the type of the center object
+ * @param <G> the type of the right object
+ * @since alpha
+ */
 public class Triplet<E, F, G> implements Serializable {
 	private static final long serialVersionUID = 9000504761605746651L;
 	private E left;
-	private F middle;
+	private F center;
 	private G right;
+	
 
-	public Triplet(E left, F middle, G right) {
+	/**
+	 * Creates a tuple of three objects based on generics.
+	 * @param left the left object of the tuple
+	 * @param center the center object of the tuple
+	 * @param right the right object of the tuple
+	 */
+	public Triplet(E left, F center, G right) {
 		this.left = left;
-		this.middle = middle;
+		this.center = center;
 		this.right = right;
 	}
 
+	/**
+	 * Gets the left object of the triplet.
+	 * @return the left object of the triplet
+	 */
 	public E getLeft() {
 		return left;
 	}
 	
-	public F getMiddle() {
-		return middle;
+	/**
+	 * Gets the center object of the triplet.
+	 * @return the center object of the triplet
+	 */
+	public F getCenter() {
+		return center;
 	}
 
+	/**
+	 * Gets the right object of the triplet.
+	 * @return the right object of the triplet
+	 */
 	public G getRight() {
 		return right;
 	}
 	
-	public void update(E left, F middle, G right) {
+	/**
+	 * Updates the values of the tuple.
+	 * @param left the left value of the triplet
+	 * @param center the center value of the triplet
+	 * @param right the right value of the triplet
+	 */
+	public void update(E left, F center, G right) {
 		this.left = left;
-		this.middle = middle;
+		this.center = center;
 		this.right = right;
 	}
 	
@@ -37,6 +71,6 @@ public class Triplet<E, F, G> implements Serializable {
 	    if (this.getClass() != o.getClass()) return false;
 	    if (this == (Triplet) o) return true;
 	    Triplet compare = (Triplet) o;
-	    return compare.getLeft() == this.getLeft() && compare.getMiddle() == this.getMiddle() && compare.getRight() == this.getRight();
+	    return compare.getLeft() == this.getLeft() && compare.getCenter() == this.getCenter() && compare.getRight() == this.getRight();
 	}
 }
