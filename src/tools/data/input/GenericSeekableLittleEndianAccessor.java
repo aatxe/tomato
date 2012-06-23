@@ -6,9 +6,9 @@ import tools.ConsoleOutput;
 public class GenericSeekableLittleEndianAccessor extends GenericLittleEndianAccessor implements SeekableLittleEndianAccessor {
 	private SeekableInputStreamBytestream bs;
 
-	public GenericSeekableLittleEndianAccessor(SeekableInputStreamBytestream bs) {
-		super(bs);
-		this.bs = bs;
+	public GenericSeekableLittleEndianAccessor(ByteArrayByteStream byteArrayByteStream) {
+		super(byteArrayByteStream);
+		this.bs = byteArrayByteStream;
 	}
 
 	public void seek(long offset) {

@@ -13,6 +13,9 @@ import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 import tools.ConsoleOutput;
 import tools.HexTool;
+import tools.data.input.ByteArrayByteStream;
+import tools.data.input.GenericSeekableLittleEndianAccessor;
+import tools.data.input.SeekableLittleEndianAccessor;
 import client.MapleClient;
 import constants.ServerConstants;
 
@@ -53,11 +56,21 @@ public class MapleServerHandler extends SimpleChannelHandler {
 	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-		// TODO: implement message retrieval.
+		// TODO: implement packet processing.
 		MaplePacketDecoder mpd = new MaplePacketDecoder();
 		MaplePacket mp = (MaplePacket) mpd.decode(ctx, e.getChannel(), (ChannelBuffer) e.getMessage());
 		byte[] data = mp.getBytes();
 		System.out.println(HexTool.toString(data));
+		SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(data));
+		MapleClient client = (MapleClient) e.getChannel().getAttachment();
+		MaplePacketHandler mph = MaplePacketProcessor.getInstance().getHandler(slea.readShort());
+		if (mph != null && mph.validate(client)) {
+			try {
+				mph.process(slea, client);
+			} catch (Throwable t) {
+				// TODO: log all packet processing exceptions.
+			}
+		}
 	}
 	
 	/*@Override
