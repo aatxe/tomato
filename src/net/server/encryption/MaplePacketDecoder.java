@@ -10,14 +10,14 @@ import client.MapleClient;
 
 public class MaplePacketDecoder extends OneToOneDecoder {
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
+	public Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
 		MapleClient client = (MapleClient) channel.getAttachment();
 		ChannelBuffer cb = (ChannelBuffer) msg;
 		int packetLength = -1;
 		if (cb.readableBytes() < 4) {
 			return null;
 		} else {
-			int opcode = cb.readByte();
+			int opcode = cb.readInt();
 			if (!client.getRecvCrypto().checkPacket(opcode)) {
 				channel.close();
 				return null;

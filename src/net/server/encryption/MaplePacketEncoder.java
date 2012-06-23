@@ -9,7 +9,7 @@ import client.MapleClient;
 
 public class MaplePacketEncoder extends OneToOneEncoder {
 	@Override
-	protected Object encode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
+	public Object encode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
 		MaplePacket packet = (MaplePacket) msg;
 		MapleClient client = (MapleClient) channel.getAttachment();
 		if (client != null) {

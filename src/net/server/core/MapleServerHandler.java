@@ -1,6 +1,7 @@
 package net.server.core;
 
 import net.encryption.MapleObfuscator;
+import net.server.encryption.MaplePacketDecoder;
 import net.tools.MaplePacketCreator;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -51,19 +52,20 @@ public class MapleServerHandler extends SimpleChannelHandler {
 	}
 	
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
+	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		// TODO: implement message retrieval.
-		byte[] data = ((ChannelBuffer) e.getMessage()).array();
+		MaplePacketDecoder mpd = new MaplePacketDecoder();
+		MaplePacket mp = (MaplePacket) mpd.decode(ctx, e.getChannel(), (ChannelBuffer) e.getMessage());
+		byte[] data = mp.getBytes();
 		System.out.println(HexTool.toString(data));
 	}
 	
 	/*@Override
-	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) {
-		/*Runnable r = ((MaplePacket) e.getMessage()).getOnSend();
+	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+		Runnable r = ((MaplePacket) e.getMessage()).getOnSend();
 		if (r != null) {
 			r.run();
-		}/
-		super.writeRequested(ctx, e);
+		}
 	}*/
 	
 	@Override

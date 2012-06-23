@@ -15,4 +15,12 @@ public class MaplePacketCreator {
 		mplew.write(0x08);
 		return mplew.getPacket();
 	}
+	
+	public static MaplePacket getLoginFailed() {
+		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(8);
+		mplew.writeShort(0x00);
+		mplew.writeInt(4);
+		mplew.writeShort(0);
+		return mplew.getPacket();
+	}
 }
