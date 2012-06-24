@@ -12,13 +12,15 @@ import java.util.concurrent.TimeUnit;
  * @since alpha
  */
 public class Scheduler {
+	private static Scheduler instance;
 	private ScheduledThreadPoolExecutor stpe;
 	private TimeUnit unit = TimeUnit.MILLISECONDS;
 	
 	/**
 	 * Creates a new <code>Scheduler</code> using milliseconds.
+	 * Use <code>getInstance()</code> if usage requires this.
 	 */
-	public Scheduler() {
+	protected Scheduler() {
 		this(TimeUnit.MILLISECONDS);
 	}
 	
@@ -75,5 +77,12 @@ public class Scheduler {
 	 */
 	public void shutdown() {
 		stpe.shutdown();
+	}
+	
+	public static Scheduler getInstance() {
+		if (instance == null) {
+			instance = new Scheduler();
+		}
+		return instance;
 	}
 }

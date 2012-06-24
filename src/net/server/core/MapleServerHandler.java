@@ -43,6 +43,7 @@ public class MapleServerHandler extends SimpleChannelHandler {
 		// TODO: set client's world and channel.
 		e.getChannel().write(MaplePacketCreator.getHandshake(ServerConstants.MAJOR_VERSION, ServerConstants.MINOR_VERSION, ivSend, ivRecv));
 		e.getChannel().setAttachment(client);
+		// client.scheduleKeepAlive();
 	}
 	
 	@Override
@@ -64,19 +65,20 @@ public class MapleServerHandler extends SimpleChannelHandler {
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		MaplePacketDecoder mpd = new MaplePacketDecoder();
 		MaplePacket mp = (MaplePacket) mpd.decode(ctx, e.getChannel(), (ChannelBuffer) e.getMessage());
-		byte[] data = mp.getBytes();
-		System.out.println(HexTool.toString(data));
-		SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(data));
-		MapleClient client = (MapleClient) e.getChannel().getAttachment();
-		MaplePacketHandler mph = MaplePacketProcessor.getInstance().getHandler(slea.readShort());
-		if (mph != null && mph.validate(client)) {
-			try {
-				mph.process(slea, client);
-			} catch (Throwable t) {
-				// TODO: log all packet processing exceptions.
+		if (mp != null) {
+			byte[] data = mp.getBytes();
+			System.out.println(HexTool.toString(data));
+			SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(data));
+			MapleClient client = (MapleClient) e.getChannel().getAttachment();
+			MaplePacketHandler mph = MaplePacketProcessor.getInstance().getHandler(slea.readShort());
+			if (mph != null && mph.validate(client)) {
+				try {
+					mph.process(slea, client);
+				} catch (Throwable t) {
+					// TODO: log all packet processing exceptions.
+				}
 			}
 		}
-		e.getChannel().write(new ByteArrayMaplePacket(new byte[]{0, 0}));
 	}
 	
 	/*@Override

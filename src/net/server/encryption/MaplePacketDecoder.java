@@ -2,6 +2,7 @@ package net.server.encryption;
 
 import net.encryption.MapleObfuscator;
 import net.server.core.ByteArrayMaplePacket;
+import net.server.opcodes.RecvOpcode;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -20,7 +21,7 @@ public class MaplePacketDecoder extends OneToOneDecoder {
 		MapleClient client = (MapleClient) channel.getAttachment();
 		ChannelBuffer cb = (ChannelBuffer) msg;
 		int packetLength = -1;
-		if (cb.readableBytes() == 2 && (cb.readByte() == 0x23 || cb.readByte() == 0x23)) {
+		if (cb.readableBytes() == 2 && (cb.readByte() == RecvOpcode.ClientConnected.getOpcode() || cb.readByte() == RecvOpcode.ClientConnected.getOpcode())) {
 			return new ByteArrayMaplePacket(cb.array());
 		} else if (cb.readableBytes() < 4) {
 			return null;

@@ -1,6 +1,7 @@
 package net.tools;
 
 import net.server.core.MaplePacket;
+import net.server.opcodes.SendOpcode;
 import tools.data.output.MaplePacketLittleEndianWriter;
 
 /**
@@ -40,6 +41,12 @@ public class MaplePacketCreator {
 		mplew.writeInt(4); // reason
 		// TODO: make this more extensible.
 		mplew.writeShort(0);
+		return mplew.getPacket();
+	}
+	
+	public static MaplePacket getKeepAlive() {
+		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(2);
+		mplew.writeShort(SendOpcode.KeepAlive.getOpcode());
 		return mplew.getPacket();
 	}
 }

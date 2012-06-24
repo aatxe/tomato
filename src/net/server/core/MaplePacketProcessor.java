@@ -1,5 +1,7 @@
 package net.server.core;
 
+import net.server.handlers.ClientConnectedHandler;
+import net.server.handlers.KeepAliveHandler;
 import net.server.opcodes.RecvOpcode;
 
 /**
@@ -43,6 +45,15 @@ public class MaplePacketProcessor {
 	 * @param opcode the opcode to be registered
 	 * @param handler the <code>MaplePacketHandler</code> to be registered
 	 */
+	public void register(RecvOpcode opcode, MaplePacketHandler handler) {
+		handlers[opcode.getOpcode()] = handler;
+	}
+	
+	/**
+	 * Registers a handler with a specified opcode.
+	 * @param opcode the opcode to be registered
+	 * @param handler the <code>MaplePacketHandler</code> to be registered
+	 */
 	public void register(int opcode, MaplePacketHandler handler) {
 		handlers[opcode] = handler;
 	}
@@ -64,9 +75,11 @@ public class MaplePacketProcessor {
 	 * Registers all the handlers with the packet processor.
 	 */
 	public void configure() {
-		// TODO: register some handlers, yo.
+		register(RecvOpcode.ClientConnected, new ClientConnectedHandler());
+		register(RecvOpcode.KeepAlive, new KeepAliveHandler());
+		// TODO: register moar handlers, yo.
 	}
-	
+
 	/**
 	 * Gets the universal instance of the packet processor.
 	 * @return the universal <code>MaplePacketProcessor</code>
