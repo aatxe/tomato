@@ -18,7 +18,7 @@ public class MaplePacketCreator {
 	 * @param recvIv the initialization vector for received packets
 	 * @return the basic introduction packet to send to new clients
 	 */
-	public static MaplePacket getHello(short majorVersion, short minorVersion, byte[] sendIv, byte[] recvIv) {
+	public static MaplePacket getHandshake(short majorVersion, short minorVersion, byte[] sendIv, byte[] recvIv) {
 		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(8);
 		mplew.writeShort(0x0E);
 		mplew.writeShort(majorVersion);

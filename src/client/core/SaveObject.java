@@ -10,20 +10,25 @@ import tools.Pair;
  * @since alpha
  */
 public class SaveObject {
+	private String tableName; 
 	private ArrayList<Pair<String, Object>> saveDict;
 	
 	/**
 	 * Creates a new <code>SaveObject</code>.
+	 * @param tableName the name of the database table
 	 */
-	public SaveObject() {
+	public SaveObject(String tableName) {
+		this.tableName = tableName;
 		saveDict = new ArrayList<Pair<String, Object>>();
 	}
 	
 	/**
 	 * Creates a new <code>SaveObject</code> with the supplied entries.
+	 * @param tableName the name of the database table
 	 * @param entries the entries to add to the save object.
 	 */
-	public SaveObject(Pair<String, Object>[] entries) {
+	public SaveObject(String tableName, Pair<String, Object>[] entries) {
+		this.tableName = tableName;
 		saveDict = new ArrayList<Pair<String, Object>>(entries.length);
 		for (Pair<String, Object> entry : entries) {
 			saveDict.add(entry);
@@ -33,9 +38,11 @@ public class SaveObject {
 
 	/**
 	 * Creates a new <code>SaveObject</code> with the supplied entries.
+	 * @param tableName the name of the database table
 	 * @param entries the entries to add to the save object.
 	 */
-	public SaveObject(ArrayList<Pair<String, Object>> entries) {
+	public SaveObject(String tableName, ArrayList<Pair<String, Object>> entries) {
+		this.tableName = tableName;
 		saveDict = entries;
 	}
 	
@@ -83,5 +90,21 @@ public class SaveObject {
 	 */
 	public void add(String key, Object value) {
 		this.add(new Pair<String, Object>(key, value));
+	}
+	
+	/**
+	 * Gets the name of the database table for this object.
+	 * @return the name of the database table
+	 */
+	public String getTableName() {
+		return this.tableName;
+	}
+	
+	/**
+	 * Gets the number of entries to save for this object.
+	 * @return the number of entries to save
+	 */
+	public int size() {
+		return saveDict.size();
 	}
 }

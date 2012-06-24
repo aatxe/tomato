@@ -20,7 +20,9 @@ public class MaplePacketDecoder extends OneToOneDecoder {
 		MapleClient client = (MapleClient) channel.getAttachment();
 		ChannelBuffer cb = (ChannelBuffer) msg;
 		int packetLength = -1;
-		if (cb.readableBytes() < 4) {
+		if (cb.readableBytes() == 2 && (cb.readByte() == 0x23 || cb.readByte() == 0x23)) {
+			return new ByteArrayMaplePacket(cb.array());
+		} else if (cb.readableBytes() < 4) {
 			return null;
 		} else {
 			int opcode = cb.readInt();

@@ -8,7 +8,7 @@ package net.server.opcodes;
  * @since alpha
  */
 public enum RecvOpcode {
-	TROLL(0x00);
+	KeepAlive(0x2E);
 	private int opcode = 0;
 	
 	/**

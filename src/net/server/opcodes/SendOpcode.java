@@ -8,7 +8,7 @@ package net.server.opcodes;
  * @since alpha
  */
 public enum SendOpcode {
-	TROLL(0x00);
+	KeepAlive(0x11);
 	private int opcode = 0;
 
 	/**

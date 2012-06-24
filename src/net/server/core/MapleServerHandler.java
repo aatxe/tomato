@@ -41,7 +41,7 @@ public class MapleServerHandler extends SimpleChannelHandler {
 		MapleObfuscator recv = new MapleObfuscator(key, ivRecv, (short) ServerConstants.MAJOR_VERSION);
 		MapleClient client = new MapleClient(e.getChannel(), send, recv);
 		// TODO: set client's world and channel.
-		e.getChannel().write(MaplePacketCreator.getHello(ServerConstants.MAJOR_VERSION, ServerConstants.MINOR_VERSION, ivSend, ivRecv));
+		e.getChannel().write(MaplePacketCreator.getHandshake(ServerConstants.MAJOR_VERSION, ServerConstants.MINOR_VERSION, ivSend, ivRecv));
 		e.getChannel().setAttachment(client);
 	}
 	
@@ -62,7 +62,6 @@ public class MapleServerHandler extends SimpleChannelHandler {
 	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-		// TODO: implement packet processing.
 		MaplePacketDecoder mpd = new MaplePacketDecoder();
 		MaplePacket mp = (MaplePacket) mpd.decode(ctx, e.getChannel(), (ChannelBuffer) e.getMessage());
 		byte[] data = mp.getBytes();
@@ -77,6 +76,7 @@ public class MapleServerHandler extends SimpleChannelHandler {
 				// TODO: log all packet processing exceptions.
 			}
 		}
+		e.getChannel().write(new ByteArrayMaplePacket(new byte[]{0, 0}));
 	}
 	
 	/*@Override
