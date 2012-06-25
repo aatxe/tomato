@@ -25,7 +25,11 @@ public class ConsoleOutput {
 	 * @param newLine whether or not to end the line with a new line
 	 */
 	public static void print(String message, boolean newLine) {
-		System.out.print("[" + SourceConstants.SOURCE_NAME + "] [" + now() + "] " + message + ((newLine) ? "\n" : ""));
+		if (newLine) {
+			System.out.println("[" + SourceConstants.SOURCE_NAME + "] [" + now() + "] " + message);
+		} else {
+			System.out.print("[" + SourceConstants.SOURCE_NAME + "] [" + now() + "] " + message + ((newLine) ? "\n" : ""));
+		}
 	}
 
 	/**

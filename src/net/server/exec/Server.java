@@ -18,11 +18,11 @@ public class Server {
 		Scanner in = new Scanner(System.in);
 		ServerBootstrapper exec = new ServerBootstrapper();
 		exec.bind(8484);
-		ConsoleOutput.print("Bound on 8484.");
+		ConsoleOutput.print("[Login] Server bound on 8484.");
 		while (true) {
 			if (in.nextLine().equalsIgnoreCase("exit")) {
 				exec.shutdown();
-				ConsoleOutput.print("Shut down.");
+				ConsoleOutput.print("[Login] Shutdown complete.");
 				break;
 			}
 		}

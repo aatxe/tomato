@@ -3,7 +3,7 @@ package tools;
 import java.io.Serializable;
 
 /**
- * A pair of three objects, based on generics.
+ * A tuple of three objects, based on generics.
  * @author tomato
  * @version 1.0
  * @param <E> the type of the left object

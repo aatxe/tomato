@@ -16,7 +16,7 @@ import org.jboss.netty.channel.Channels;
 public class ServerPipelineFactory implements ChannelPipelineFactory {
 	@Override
 	public ChannelPipeline getPipeline() {
-		ChannelPipeline cp = Channels.pipeline(new MapleServerHandler()); // TODO: pipeline(new MapleServerHandler)
+		ChannelPipeline cp = Channels.pipeline(new MapleServerHandler());
 		cp.addLast("customDecoder", new MaplePacketDecoder());
 		cp.addLast("customEncoder", new MaplePacketEncoder());
 		return cp;

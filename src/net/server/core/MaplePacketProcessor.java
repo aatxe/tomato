@@ -1,6 +1,7 @@
 package net.server.core;
 
 import net.server.handlers.ClientConnectedHandler;
+import net.server.handlers.ClientErrorHandler;
 import net.server.handlers.KeepAliveHandler;
 import net.server.opcodes.RecvOpcode;
 
@@ -77,6 +78,7 @@ public class MaplePacketProcessor {
 	public void configure() {
 		register(RecvOpcode.ClientConnected, new ClientConnectedHandler());
 		register(RecvOpcode.KeepAlive, new KeepAliveHandler());
+		register(RecvOpcode.ClientError, new ClientErrorHandler());
 		// TODO: register moar handlers, yo.
 	}
 

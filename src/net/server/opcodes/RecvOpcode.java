@@ -8,8 +8,10 @@ package net.server.opcodes;
  * @since alpha
  */
 public enum RecvOpcode {
-	ClientConnected(0x38),
-	KeepAlive(0x2E);
+	ClientValidation(0x14),
+	KeepAlive(0x2E),
+	ClientError(0x2F),
+	ClientConnected(0x38);
 	private int opcode = 0;
 	
 	/**

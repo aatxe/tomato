@@ -3,6 +3,7 @@ package tools.data.output;
 import java.io.ByteArrayOutputStream;
 import net.server.core.ByteArrayMaplePacket;
 import net.server.core.MaplePacket;
+import net.server.opcodes.SendOpcode;
 import tools.HexTool;
 
 /**
@@ -35,6 +36,14 @@ public class MaplePacketLittleEndianWriter extends GenericLittleEndianWriter {
 	 */
 	public MaplePacket getPacket() {
 		return new ByteArrayMaplePacket(baos.toByteArray());
+	}
+	
+	/**
+	 * Write an opcode as a short to the sequence.
+	 * @param opcode the opcode to write
+	 */
+	public void writeOpcode(SendOpcode opcode) {
+		this.writeShort(opcode.getOpcode());
 	}
 
 	@Override

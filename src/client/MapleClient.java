@@ -2,9 +2,9 @@ package client;
 
 import net.encryption.MapleObfuscator;
 import org.jboss.netty.channel.Channel;
-import server.tools.Scheduler;
+import tools.server.Scheduler;
 import client.core.MapleObject;
-import client.events.KeepAlive;
+import client.events.KeepAliveEvent;
 import constants.SourceConstants;
 
 /**
@@ -89,6 +89,6 @@ public class MapleClient extends MapleObject {
 	 * Schedules a <code>Runnable</code> to send KeepAlive packets to the client.
 	 */
 	public void scheduleKeepAlive() {
-		Scheduler.getInstance().scheduleNow(new KeepAlive(session), SourceConstants.KEEPALIVE_PERIOD);
+		Scheduler.getInstance().scheduleNow(new KeepAliveEvent(session), SourceConstants.KEEPALIVE_PERIOD);
 	}
 }

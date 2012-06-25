@@ -6,6 +6,8 @@ import java.util.concurrent.Executors;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
+import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.ChannelGroupFuture;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
@@ -21,7 +23,7 @@ public class ServerBootstrapper {
 	private final ChannelGroup bindings = new DefaultChannelGroup("server-bindings");
 	private ChannelFactory factory;
 	private ServerBootstrap bootstrap;
-	private ServerPipelineFactory defaultPipelineFactory = new ServerPipelineFactory();
+	private ChannelPipelineFactory defaultPipelineFactory = new ServerPipelineFactory();
 	
 	/**
 	 * Creates a bootstrapper for the server.
@@ -32,6 +34,23 @@ public class ServerBootstrapper {
 		bootstrap.setPipelineFactory(defaultPipelineFactory);
 		bootstrap.setOption("child.tcpNoDelay", true);
 		bootstrap.setOption("child.keepAlive", true);
+	}
+	
+	/**
+	 * Gets the <code>ChannelPipelineFactory</code> used by the bootstrapper.
+	 * @return the pipeline factory in use
+	 */
+	public ChannelPipelineFactory getPipelineFactory() {
+		return this.defaultPipelineFactory;
+	}
+	
+	/**
+	 * Sets the <code>ChannelPipelineFactory</code> to be used by the bootstrapper.
+	 * @param pipelineFactory the pipeline factory to be used
+	 */
+	public void setPipelineFactory(ChannelPipelineFactory pipelineFactory) {
+		this.defaultPipelineFactory = pipelineFactory;
+		bootstrap.setPipelineFactory(defaultPipelineFactory);
 	}
 	
 	/**
@@ -79,6 +98,19 @@ public class ServerBootstrapper {
 	 */
 	public ChannelGroupFuture unbind() {
 		return bindings.close();
+	}
+	
+	public ChannelFuture unbind(int portNumber) {
+		return this.unbind(new InetSocketAddress(portNumber));
+	}
+	
+	public ChannelFuture unbind(SocketAddress port) {
+		for (Channel ch : bindings) {
+			if (ch.getLocalAddress().equals(port) || ch.getLocalAddress().toString().contains(port.toString())) {
+				return ch.unbind();
+			}
+		}
+		return null;
 	}
 	
 	/**

@@ -2,7 +2,6 @@ package net.server.core;
 
 import net.encryption.MapleObfuscator;
 import net.server.encryption.MaplePacketDecoder;
-import net.tools.MaplePacketCreator;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
@@ -16,6 +15,7 @@ import tools.HexTool;
 import tools.data.input.ByteArrayByteStream;
 import tools.data.input.GenericSeekableLittleEndianAccessor;
 import tools.data.input.SeekableLittleEndianAccessor;
+import tools.net.MaplePacketCreator;
 import client.MapleClient;
 import constants.ServerConstants;
 
@@ -67,7 +67,7 @@ public class MapleServerHandler extends SimpleChannelHandler {
 		MaplePacket mp = (MaplePacket) mpd.decode(ctx, e.getChannel(), (ChannelBuffer) e.getMessage());
 		if (mp != null) {
 			byte[] data = mp.getBytes();
-			System.out.println(HexTool.toString(data));
+			ConsoleOutput.print("[Recv] " + HexTool.toString(data));
 			SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(data));
 			MapleClient client = (MapleClient) e.getChannel().getAttachment();
 			MaplePacketHandler mph = MaplePacketProcessor.getInstance().getHandler(slea.readShort());
@@ -79,6 +79,7 @@ public class MapleServerHandler extends SimpleChannelHandler {
 				}
 			}
 		}
+		// e.getChannel().write(new ByteArrayMaplePacket(new byte[]{0, 0}));
 	}
 	
 	/*@Override
@@ -94,5 +95,13 @@ public class MapleServerHandler extends SimpleChannelHandler {
 		e.getChannel().close();
 		e.getCause().printStackTrace();
 		// TODO: log networking exceptions.
+	}
+	
+	/**
+	 * Gets all of the connections to the server as a <code>ChannelGroup</code>.
+	 * @return a <code>ChannelGroup</code> of all the connections.
+	 */
+	public ChannelGroup getConnections() {
+		return connections;
 	}
 }
