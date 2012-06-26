@@ -21,7 +21,7 @@ public class MaplePacketCreator {
 	 * @return the basic introduction packet to send to new clients
 	 */
 	public static MaplePacket getHandshake(short majorVersion, short minorVersion, byte[] sendIv, byte[] recvIv) {
-		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(8);
+		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(16);
 		mplew.writeShort(0x0E);
 		mplew.writeShort(majorVersion);
 		mplew.writeShort(minorVersion);
@@ -30,6 +30,20 @@ public class MaplePacketCreator {
 		mplew.write(sendIv);
 		mplew.write(ServerConstants.REGION_CODE);
 		return mplew.getPacket();
+	}
+	
+	/**
+	 * Gets the packet for a successful login action.
+	 * See packet documentation on CLogin::OnCheckPasswordResult for more information.
+	 * @return the packet for a successful login action
+	 */
+	public static MaplePacket getLoginSuccess() {
+		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(8);
+		mplew.writeOpcode(SendOpcode.CheckPassword);
+		mplew.write(0x00);
+		mplew.write(0x01);
+		// TODO: moar stuff.
+		return mplew.getPacket();		
 	}
 	
 	/**
