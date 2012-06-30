@@ -1,6 +1,7 @@
 client
 client.core
 client.events
+client.internal
 constants
 net.encryption
 net.server.core
@@ -8,7 +9,10 @@ net.server.debug
 net.server.encryption
 net.server.exec
 net.server.handlers
+net.server.internal
+net.server.login
 net.server.opcodes
+net.server.opcodes.internal
 tools
 tools.data.input
 tools.data.output
