@@ -1,9 +1,9 @@
 package net.server.handlers;
 
-import constants.ServerConstants;
+import net.server.core.AbstractMaplePacketHandler;
 import tools.data.input.SeekableLittleEndianAccessor;
 import client.MapleClient;
-import net.server.core.AbstractMaplePacketHandler;
+import constants.ServerConstants;
 
 /**
  *  A handler for packets validating a newly connected client.

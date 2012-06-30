@@ -1,6 +1,5 @@
-package net.server.exec;
+package net.server.internal;
 
-import net.server.core.MapleServerHandler;
 import net.server.encryption.MaplePacketDecoder;
 import net.server.encryption.MaplePacketEncoder;
 import org.jboss.netty.channel.ChannelPipeline;
@@ -8,15 +7,15 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 
 /**
- * A <code>ChannelPipelineFactory</code> for server instances.
+ * A pipeline factory for internal connection handlers.
  * @author tomato
  * @version 1.0
- * @since alpha
+ * @since alpha2
  */
-public class ServerPipelineFactory implements ChannelPipelineFactory {
+public class InternalPipelineFactory implements ChannelPipelineFactory {
 	@Override
 	public ChannelPipeline getPipeline() {
-		ChannelPipeline cp = Channels.pipeline(new MapleServerHandler());
+		ChannelPipeline cp = Channels.pipeline(new InternalConnectionHandler());
 		cp.addLast("customDecoder", new MaplePacketDecoder());
 		cp.addLast("customEncoder", new MaplePacketEncoder());
 		return cp;

@@ -1,27 +1,27 @@
 package net.server.exec;
 
 import java.util.Scanner;
+import net.server.login.LoginServer;
 import tools.ConsoleOutput;
 
 /**
- * The executable base for the server.
+ * A testing application for the login server.
  * @author tomato
  * @version 1.0
- * @since alpha
+ * @since alpha2
  */
-public class Server {
+public class LoginServerTest {
 	/**
 	 * Starts the server.
 	 * @param args does nothing
 	 */
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
-		ServerBootstrapper exec = new ServerBootstrapper();
-		exec.bind(8484);
+		LoginServer login = new LoginServer(8484);
 		ConsoleOutput.print("[Login] Server bound on 8484.");
 		while (true) {
 			if (in.nextLine().equalsIgnoreCase("exit")) {
-				exec.shutdown();
+				login.shutdown();
 				ConsoleOutput.print("[Login] Shutdown complete.");
 				break;
 			}

@@ -3,6 +3,9 @@ package net.server.debug;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -16,18 +19,23 @@ import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import net.server.core.ByteArrayMaplePacket;
-import net.server.exec.ServerBootstrapper;
+import net.server.core.MaplePacket;
+import net.server.login.LoginServer;
 import tools.ConsoleOutput;
 import tools.HexTool;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
+import tools.net.LoginPacketCreator;
+import client.MapleAccount;
 
+/**
+ * A Swing GUI for developing and debugging servers.
+ * @author tomato
+ * @version 1.0
+ * @since alpha
+ */
 public class DebugUI extends JFrame {
-
 	private static final long serialVersionUID = -8144315523215216792L;
 	private ArrayList<Integer> bound = new ArrayList<Integer>();
-	private ServerBootstrapper exec;
+	private LoginServer login;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
@@ -52,8 +60,8 @@ public class DebugUI extends JFrame {
 	 * Create the frame.
 	 */
 	public DebugUI() {
-		exec = new ServerBootstrapper();
-		exec.setPipelineFactory(new DebuggingServerPipelineFactory());
+		login = new LoginServer();
+		login.setPipelineFactory(new DebuggingLoginServerPipelineFactory());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -95,15 +103,6 @@ public class DebugUI extends JFrame {
 		final JButton btnBind = new JButton("Bind");
 		
 		textField = new JTextField();
-		textField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (bound.contains(Integer.parseInt(textField.getText()))) {
-					btnBind.setText("Unbind");
-				} else {
-					btnBind.setText("Bind");
-				}
-			}
-		});
 		textField.setText("8484");
 		horizontalBox.add(textField);
 		textField.setColumns(10);
@@ -111,14 +110,16 @@ public class DebugUI extends JFrame {
 		btnBind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (bound.contains(Integer.parseInt(textField.getText()))) {
-					exec.unbind(Integer.parseInt(textField.getText()));
+					login.unbind();
 					bound.remove(Integer.parseInt(textField.getText()));
 					btnBind.setText("Bind");
+					textField.setEditable(true);
 					ConsoleOutput.print("[Login] Unbound server on " + textField.getText());
 				} else {
-					exec.bind(Integer.parseInt(textField.getText()));
+					login.bind(Integer.parseInt(textField.getText()));
 					bound.add(Integer.parseInt(textField.getText()));
 					btnBind.setText("Unbind");
+					textField.setEditable(false);
 					ConsoleOutput.print("[Login] Bound on " + textField.getText());
 				}
 			}
@@ -141,7 +142,7 @@ public class DebugUI extends JFrame {
 		JButton btnSend = new JButton("Send");
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				((DebuggingServerPipelineFactory) exec.getPipelineFactory()).debugWriteAll(new ByteArrayMaplePacket(HexTool.getByteArrayFromHexString(textField_1.getText())));
+				((DebuggingLoginServerPipelineFactory) login.getPipelineFactory()).debugWriteAll(new ByteArrayMaplePacket(HexTool.getByteArrayFromHexString(textField_1.getText())));
 				ConsoleOutput.print("[Send] " + textField_1.getText());
 			}
 		});
@@ -149,6 +150,25 @@ public class DebugUI extends JFrame {
 		
 		Component horizontalStrut_3 = Box.createHorizontalStrut(20);
 		horizontalBox_1.add(horizontalStrut_3);
+		
+		Box horizontalBox_2 = Box.createHorizontalBox();
+		tabbedPane.addTab("Premade", null, horizontalBox_2, null);
+		
+		Component horizontalStrut_4 = Box.createHorizontalStrut(20);
+		horizontalBox_2.add(horizontalStrut_4);
+		
+		JButton btnRice = new JButton("Rice");
+		btnRice.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MaplePacket mp = LoginPacketCreator.getLoginSuccess(MapleAccount.rice());
+				((DebuggingLoginServerPipelineFactory) login.getPipelineFactory()).debugWriteAll(mp);
+				ConsoleOutput.print("[Sent] " + HexTool.toString(mp.getBytes()));
+			}
+		});
+		horizontalBox_2.add(btnRice);
+		
+		Component horizontalStrut_5 = Box.createHorizontalStrut(20);
+		horizontalBox_2.add(horizontalStrut_5);
 		contentPane.setLayout(gl_contentPane);
 		
 		MessageConsole mc = new MessageConsole(textPane);

@@ -1,7 +1,7 @@
 package client.events;
 
 import org.jboss.netty.channel.Channel;
-import tools.net.MaplePacketCreator;
+import tools.net.LoginPacketCreator;
 import constants.SourceConstants;
 import client.MapleClient;
 
@@ -12,6 +12,10 @@ import client.MapleClient;
  * @since alpha
  */
 public class KeepAliveEvent extends AbstractEvent {
+	/**
+	 * Creates a runnable event wrapping a <code>Channel</code>
+	 * @param session the <code>Channel</code> session to be wrapped
+	 */
 	public KeepAliveEvent(Channel session) {
 		super(session);
 	}
@@ -22,7 +26,7 @@ public class KeepAliveEvent extends AbstractEvent {
 		if (client.getTimeSinceLastKeepAlive() > SourceConstants.KEEPALIVE_TIMEOUT && client.getLastKeepAliveRecieved() > 0) {
 			session.close();
 		} else {
-			session.write(MaplePacketCreator.getKeepAlive());
+			session.write(LoginPacketCreator.getKeepAlive());
 		}
 	}
 

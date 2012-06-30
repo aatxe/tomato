@@ -16,6 +16,7 @@ public interface MaplePacketHandler {
 	 * @param c the specified client
 	 */
 	public void process(SeekableLittleEndianAccessor slea, MapleClient c);
+	
 	/**
 	 * Validates the state of the specified client.
 	 * @param c the client to be validated

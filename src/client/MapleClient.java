@@ -3,21 +3,23 @@ package client;
 import net.encryption.MapleObfuscator;
 import org.jboss.netty.channel.Channel;
 import tools.server.Scheduler;
-import client.core.MapleObject;
+import client.core.CryptoClient;
 import client.events.KeepAliveEvent;
 import constants.SourceConstants;
 
 /**
- * A connected client, and their account.
+ * A connected client, their account, and their current character.
  * @author tomato
  * @version 1.0
  * @since alpha
  */
-public class MapleClient extends MapleObject {
+public class MapleClient implements CryptoClient {
 	private MapleObfuscator send;
 	private MapleObfuscator recv;
 	private Channel session;
 	private long lastKeepAliveRecv = -1;
+	private MapleAccount account;
+	private MapleCharacter player;
 	
 	/**
 	 * Constructs a client with a session, and the respective packet obfuscators.
@@ -31,18 +33,12 @@ public class MapleClient extends MapleObject {
 		this.recv = recv;
 	}
 	
-	/**
-	 * Gets the packet obfuscator for sending packets.
-	 * @return the <code>MapleObfuscator</code> handling packets being sent
-	 */
+	@Override
 	public MapleObfuscator getSendCrypto() {
 		return send;
 	}
 	
-	/**
-	 * Gets the packet obfuscator for receiving packets.
-	 * @return the <code>MapleObfuscator</code> handling packets being received
-	 */
+	@Override
 	public MapleObfuscator getRecvCrypto() {
 		return recv;
 	}
@@ -90,5 +86,21 @@ public class MapleClient extends MapleObject {
 	 */
 	public void scheduleKeepAlive() {
 		Scheduler.getInstance().scheduleNow(new KeepAliveEvent(session), SourceConstants.KEEPALIVE_PERIOD);
+	}
+	
+	/**
+	 * Gets the account that this client is currently logged in to.
+	 * @return the current account of this client
+	 */
+	public MapleAccount getAccount() {
+		return this.account;
+	}
+	
+	/**
+	 * Gets the character that this client is currently playing.
+	 * @return the current character of this client
+	 */
+	public MapleCharacter getPlayer() {
+		return this.player;
 	}
 }

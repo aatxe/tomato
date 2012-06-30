@@ -10,16 +10,12 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
-/*
- *  Create a simple console to display text messages.
- *
- *  Messages can be directed here from different sources. Each source can
- *  have its messages displayed in a different color.
- *
- *  Messages can either be appended to the console or inserted as the first
- *  line of the console
- *
- *  You can limit the number of lines to hold in the Document.
+/**
+ * A handler for consoles displayed in a GUI.
+ * @author Public Domain
+ * @author tomato
+ * @version 1.0
+ * @since alpha
  */
 public class MessageConsole {
 	private JTextComponent textComponent;
@@ -27,14 +23,18 @@ public class MessageConsole {
 	private boolean isAppend;
 	private DocumentListener limitLinesListener;
 
+	/**
+	 * Creates a message console with a text component, that is appending.
+	 * @param textComponent the text component to use
+	 */
 	public MessageConsole(JTextComponent textComponent) {
 		this(textComponent, true);
 	}
 
-	/*
-	 * Use the text component specified as a simply console to display text messages.
-	 * 
-	 * The messages can either be appended to the end of the console or inserted as the first line of the console.
+	/**
+	 * Creates a message console with a text component.
+	 * @param textComponent the text component to use
+	 * @param isAppend whether or not the console should append
 	 */
 	public MessageConsole(JTextComponent textComponent, boolean isAppend) {
 		this.textComponent = textComponent;
@@ -43,79 +43,80 @@ public class MessageConsole {
 		textComponent.setEditable(false);
 	}
 
-	/*
-	 * Redirect the output from the standard output to the console using the default text color and null PrintStream
+	/**
+	 * Redirects <code>System.out</code> to the console.
 	 */
 	public void redirectOut() {
 		redirectOut(null, null);
 	}
 
-	/*
-	 * Redirect the output from the standard output to the console using the specified color and PrintStream. When a PrintStream is specified the message will be added to the Document before it is also written to the PrintStream.
+	/**
+	 * Redirects <code>System.out</code> to both the console and a print stream.
+	 * @param textColor the color to redirect the text as
+	 * @param printStream the print stream to redirect it to
 	 */
 	public void redirectOut(Color textColor, PrintStream printStream) {
 		ConsoleOutputStream cos = new ConsoleOutputStream(textColor, printStream);
 		System.setOut(new PrintStream(cos, true));
 	}
 
-	/*
-	 * Redirect the output from the standard error to the console using the default text color and null PrintStream
+	/**
+	 * Redirects <code>System.err</code> to the console.
 	 */
 	public void redirectErr() {
 		redirectErr(null, null);
 	}
-
-	/*
-	 * Redirect the output from the standard error to the console using the specified color and PrintStream. When a PrintStream is specified the message will be added to the Document before it is also written to the PrintStream.
+	
+	/**
+	 * Redirects <code>System.err</code> to both the console and a print stream.
+	 * @param textColor the color to redirect the text as
+	 * @param printStream the print stream to redirect it to
 	 */
 	public void redirectErr(Color textColor, PrintStream printStream) {
 		ConsoleOutputStream cos = new ConsoleOutputStream(textColor, printStream);
 		System.setErr(new PrintStream(cos, true));
 	}
 
-	/*
-	 * To prevent memory from being used up you can control the number of lines to display in the console
-	 * 
-	 * This number can be dynamically changed, but the console will only be updated the next time the Document is updated.
+	/**
+	 * Sets the number of lines for the console
+	 * @param lines the number of lines for the console
 	 */
 	public void setMessageLines(int lines) {
 		if (limitLinesListener != null)
 			document.removeDocumentListener(limitLinesListener);
-
 		limitLinesListener = new LimitLinesDocumentListener(lines, isAppend);
 		document.addDocumentListener(limitLinesListener);
 	}
 
-	/*
-	 * Class to intercept output from a PrintStream and add it to a Document. The output can optionally be redirected to a different PrintStream. The text displayed in the Document can be color coded to indicate the output source.
+	/**
+	 *  An output stream for the console.
+	 * @author tomato
+	 * @version 1.0
+	 * @since alpha
 	 */
-	class ConsoleOutputStream extends ByteArrayOutputStream {
+	private class ConsoleOutputStream extends ByteArrayOutputStream {
 		private SimpleAttributeSet attributes;
 		private PrintStream printStream;
 		private StringBuffer buffer = new StringBuffer(80);
 		private boolean isFirstLine;
 
-		/*
-		 * Specify the option text color and PrintStream
+		/**
+		 * Creates an output stream for consoles.
+		 * @param textColor the text color to use
+		 * @param printStream the print stream to redirect to
 		 */
 		public ConsoleOutputStream(Color textColor, PrintStream printStream) {
 			if (textColor != null) {
 				attributes = new SimpleAttributeSet();
 				StyleConstants.setForeground(attributes, textColor);
 			}
-
 			this.printStream = printStream;
-
 			if (isAppend)
 				isFirstLine = true;
 		}
 
-		/*
-		 * Override this method to intercept the output text. Each line of text output will actually involve invoking this method twice:
-		 * 
-		 * a) for the actual text message b) for the newLine string
-		 * 
-		 * The message will be treated differently depending on whether the line will be appended or inserted into the Document
+		/**
+		 * Flushes the stream.
 		 */
 		public void flush() {
 			String message = toString();
@@ -131,10 +132,9 @@ public class MessageConsole {
 			reset();
 		}
 
-		/*
-		 * We don't want to have blank lines in the Document. The first line added will simply be the message. For additional lines it will be:
-		 * 
-		 * newLine + message
+		/**
+		 * Appends a message to the stream.
+		 * @param message the message to append
 		 */
 		private void handleAppend(String message) {
 			if (message.endsWith("\r") || message.endsWith("\n")) {
@@ -145,10 +145,9 @@ public class MessageConsole {
 			}
 		}
 
-		/*
-		 * We don't want to merge the new message with the existing message so the line will be inserted as:
-		 * 
-		 * message + newLine
+		/**
+		 * Inserts a message into the stream.
+		 * @param message the message to insert
 		 */
 		private void handleInsert(String message) {
 			buffer.append(message);
@@ -158,20 +157,15 @@ public class MessageConsole {
 			}
 		}
 
-		/*
-		 * The message and the newLine have been added to the buffer in the appropriate order so we can now update the Document and send the text to the optional PrintStream.
+		/**
+		 * Clears the stream completely.
 		 */
 		private void clearBuffer() {
-			// In case both the standard out and standard err are being redirected
-			// we need to insert a newline character for the first line only
-
 			if (isFirstLine && document.getLength() != 0) {
 				buffer.insert(0, "\n");
 			}
-
 			isFirstLine = false;
 			String line = buffer.toString();
-
 			try {
 				if (isAppend) {
 					int offset = document.getLength();
@@ -183,11 +177,9 @@ public class MessageConsole {
 				}
 			} catch (BadLocationException ble) {
 			}
-
 			if (printStream != null) {
 				printStream.print(line);
 			}
-
 			buffer.setLength(0);
 		}
 	}

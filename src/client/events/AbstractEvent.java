@@ -11,6 +11,10 @@ import org.jboss.netty.channel.Channel;
 public abstract class AbstractEvent implements Runnable {
 	protected Channel session;
 	
+	/**
+	 * Creates a runnable event wrapping a <code>Channel</code>
+	 * @param session the <code>Channel</code> session to be wrapped
+	 */
 	public AbstractEvent(Channel session) {
 		this.session = session;
 	}

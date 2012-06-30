@@ -7,7 +7,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
-import client.MapleClient;
+import client.core.CryptoClient;
 
 /**
  * A one-to-one decoder for converting an encrypted <code>ChannelBuffer</code> to a <code>MaplePacket</code>.
@@ -18,7 +18,7 @@ import client.MapleClient;
 public class MaplePacketDecoder extends OneToOneDecoder {
 	@Override
 	public Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
-		MapleClient client = (MapleClient) channel.getAttachment();
+		CryptoClient client = (CryptoClient) channel.getAttachment();
 		ChannelBuffer cb = (ChannelBuffer) msg;
 		int packetLength = -1;
 		if (cb.readableBytes() == 2 && (cb.readByte() == RecvOpcode.ClientConnected.getOpcode() || cb.readByte() == RecvOpcode.ClientConnected.getOpcode())) {
@@ -26,12 +26,12 @@ public class MaplePacketDecoder extends OneToOneDecoder {
 		} else if (cb.readableBytes() < 4) {
 			return null;
 		} else {
-			int opcode = cb.readInt();
-			if (!client.getRecvCrypto().checkPacket(opcode)) {
+			int encodedLength = cb.readInt();
+			if (!client.getRecvCrypto().checkPacket(encodedLength)) {
 				channel.close();
 				return null;
 			}
-			packetLength = MapleObfuscator.getPacketLength(opcode);
+			packetLength = MapleObfuscator.getPacketLength(encodedLength);
 		}
 		if (cb.readableBytes() >= packetLength) {
 			byte decryptedPacket[] = cb.readBytes(packetLength).array();

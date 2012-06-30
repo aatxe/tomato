@@ -79,6 +79,10 @@ public class Scheduler {
 		stpe.shutdown();
 	}
 	
+	/**
+	 * Gets the universal instance for the scheduler.
+	 * @return the universal Scheduler instance
+	 */
 	public static Scheduler getInstance() {
 		if (instance == null) {
 			instance = new Scheduler();

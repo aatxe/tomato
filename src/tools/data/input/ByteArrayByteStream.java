@@ -14,6 +14,10 @@ public class ByteArrayByteStream implements SeekableInputStreamBytestream {
 	private long bytesRead = 0;
 	private byte[] arr;
 
+	/**
+	 * Creates a byte stream wrapping a byte array.
+	 * @param arr the array to wrap
+	 */
 	public ByteArrayByteStream(byte[] arr) {
 		this.arr = arr;
 	}

@@ -1,9 +1,9 @@
 package net.server.handlers;
 
+import net.server.core.AbstractMaplePacketHandler;
 import tools.ConsoleOutput;
 import tools.data.input.SeekableLittleEndianAccessor;
 import client.MapleClient;
-import net.server.core.AbstractMaplePacketHandler;
 
 /**
  * A handler for packets indicating a client has previously encountered an error.
