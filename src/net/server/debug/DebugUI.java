@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -34,7 +33,7 @@ import client.MapleAccount;
  */
 public class DebugUI extends JFrame {
 	private static final long serialVersionUID = -8144315523215216792L;
-	private ArrayList<Integer> bound = new ArrayList<Integer>();
+	private Integer bound;
 	private LoginServer login;
 	private JPanel contentPane;
 	private JTextField textField;
@@ -109,15 +108,15 @@ public class DebugUI extends JFrame {
 		
 		btnBind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (bound.contains(Integer.parseInt(textField.getText()))) {
+				if (bound != null && bound.equals(Integer.parseInt(textField.getText()))) {
 					login.unbind();
-					bound.remove(Integer.parseInt(textField.getText()));
+					bound = null;
 					btnBind.setText("Bind");
 					textField.setEditable(true);
 					ConsoleOutput.print("[Login] Unbound server on " + textField.getText());
 				} else {
 					login.bind(Integer.parseInt(textField.getText()));
-					bound.add(Integer.parseInt(textField.getText()));
+					bound = Integer.parseInt(textField.getText());
 					btnBind.setText("Unbind");
 					textField.setEditable(false);
 					ConsoleOutput.print("[Login] Bound on " + textField.getText());
