@@ -8,7 +8,7 @@ import net.server.handlers.KeepAliveHandler;
 import net.server.opcodes.RecvOpcode;
 
 /**
- * A processor to get handlers based on opcode.
+ * A processor to get handlers for login based on opcode.
  * @author tomato
  * @version 1.0
  * @since alpha2

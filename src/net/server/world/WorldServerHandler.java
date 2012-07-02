@@ -1,4 +1,4 @@
-package net.server.login;
+package net.server.world;
 
 import net.encryption.MapleObfuscator;
 import net.server.core.AbstractMapleServerHandler;
@@ -12,19 +12,19 @@ import client.MapleClient;
 import constants.ServerConstants;
 
 /**
- * A server handler for a login server.
+ * A server handler for a world server.
  * @author tomato
  * @version 1.0
  * @since alpha2
  */
-public class LoginServerHandler extends AbstractMapleServerHandler {
-	private ChannelGroup connections = new DefaultChannelGroup("login-connections");
+public class WorldServerHandler extends AbstractMapleServerHandler {
+	private ChannelGroup connections = new DefaultChannelGroup("world-connections");
 	
 	/**
-	 * Creates a new handler for a login server.
+	 * Creates a new handler for a world server.
 	 */
-	public LoginServerHandler() {
-		this.setPacketProcessor(LoginPacketProcessor.getInstance());
+	public WorldServerHandler() {
+		this.setPacketProcessor(WorldPacketProcessor.getInstance());
 	}
 	
 	@Override
@@ -32,8 +32,8 @@ public class LoginServerHandler extends AbstractMapleServerHandler {
 		ConsoleOutput.print("Channel opened with " + e.getChannel().getRemoteAddress() + ".");
 		connections.add(e.getChannel());
 		byte key[] = {0x13, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, (byte) 0xB4, 0x00, 0x00, 0x00, 0x1B, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x52, 0x00, 0x00, 0x00};
-		byte ivRecv[] = {70, 114, 122, 82};
-		byte ivSend[] = {82, 48, 120, 115};
+		byte ivRecv[] = {69, 92, -101, 64};
+		byte ivSend[] = {74, 55, 118, 33};
 		ivRecv[3] = (byte) (Math.random() * 255);
 		ivSend[3] = (byte) (Math.random() * 255);
 		MapleObfuscator send = new MapleObfuscator(key, ivSend, (short) (0xFFFF - ServerConstants.MAJOR_VERSION));
