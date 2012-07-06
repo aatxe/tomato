@@ -22,6 +22,8 @@ public class LoginServer extends AbstractServer {
 	 */
 	public LoginServer() {
 		super();
+		pipelineFactory = new LoginServerPipelineFactory();
+		bootstrap.setPipelineFactory(pipelineFactory);
 		internalBootstrap = new InternalBootstrapper();
 	}
 	
@@ -42,7 +44,7 @@ public class LoginServer extends AbstractServer {
 	 * @throws IOException if the IP address is invalid (not IPv4)
 	 */
 	public Channel connect(String address, int port) throws IOException {
-		return internalBootstrap.bind(address, port);
+		return internalBootstrap.connect(address, port);
 	}
 
 	/**
@@ -53,7 +55,7 @@ public class LoginServer extends AbstractServer {
 	 * @throws IOException if the IP address is invalid (not IPv4)
 	 */
 	public ChannelFuture disconnect(String address, int port) throws IOException {
-		String[] ipArray = address.split(".");
+		String[] ipArray = address.split("\\.");
 		byte[] addBytes = new byte[4];
 		if (ipArray.length != addBytes.length) {
 			throw new IOException("Invalid IP Address.");
@@ -62,6 +64,6 @@ public class LoginServer extends AbstractServer {
 				addBytes[i] = Byte.valueOf(ipArray[i]);
 			}
 		}
-		return internalBootstrap.unbind(new InetSocketAddress(InetAddress.getByAddress(addBytes), port));
+		return internalBootstrap.disconnect(new InetSocketAddress(InetAddress.getByAddress(addBytes), port));
 	}
 }

@@ -1,6 +1,7 @@
 package tools.net;
 
 import net.server.core.MaplePacket;
+import net.server.opcodes.SendOpcode;
 import tools.data.output.MaplePacketLittleEndianWriter;
 import constants.ServerConstants;
 
@@ -22,6 +23,16 @@ public class GlobalPacketCreator {
 		mplew.write(recvIv);
 		mplew.write(sendIv);
 		mplew.write(ServerConstants.REGION_CODE);
+		return mplew.getPacket();
+	}
+	
+	/**
+	 * Gets the packet to trigger a KeepAlive event with a client.
+	 * @return the packet to trigger a KeepAlive event with a client
+	 */
+	public static MaplePacket getKeepAlive() {
+		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(2);
+		mplew.writeOpcode(SendOpcode.AliveReq);
 		return mplew.getPacket();
 	}
 }

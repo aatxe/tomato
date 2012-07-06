@@ -64,7 +64,7 @@ public class InternalPacketProcessor implements MaplePacketProcessor {
 
 	@Override
 	public void configure() {
-		// TODO: register some handlers.
+		// TODO: register some moar handlers.
 	}
 	
 	/**

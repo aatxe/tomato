@@ -71,14 +71,4 @@ public class LoginPacketCreator {
 		mplew.writeInt(0x00);
 		return mplew.getPacket();
 	}
-	
-	/**
-	 * Gets the packet to trigger a KeepAlive event with a client.
-	 * @return the packet to trigger a KeepAlive event with a client
-	 */
-	public static MaplePacket getKeepAlive() {
-		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(2);
-		mplew.writeOpcode(SendOpcode.AliveReq);
-		return mplew.getPacket();
-	}
 }

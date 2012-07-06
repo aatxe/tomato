@@ -8,7 +8,7 @@ import net.encryption.MapleObfuscator;
  * @version 1.0
  * @since alpha2
  */
-public interface CryptoClient {
+public interface CryptoClient extends Client {
 	/**
 	 * Gets the packet obfuscator for sending packets.
 	 * @return the <code>MapleObfuscator</code> handling packets being sent

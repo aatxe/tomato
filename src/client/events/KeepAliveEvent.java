@@ -1,14 +1,14 @@
 package client.events;
 
 import org.jboss.netty.channel.Channel;
-import tools.net.LoginPacketCreator;
+import tools.net.GlobalPacketCreator;
+import client.core.KeepAliveClient;
 import constants.SourceConstants;
-import client.MapleClient;
 
 /**
  * A KeepAlive event, to send clients KeepAlive packets, and close dead connections.
  * @author tomato
- * @version 1.0
+ * @version 1.1
  * @since alpha
  */
 public class KeepAliveEvent extends AbstractEvent {
@@ -22,11 +22,11 @@ public class KeepAliveEvent extends AbstractEvent {
 
 	@Override
 	public void run() {
-		MapleClient client = (MapleClient) session.getAttachment();
+		KeepAliveClient client = (KeepAliveClient) session.getAttachment();
 		if (client.getTimeSinceLastKeepAlive() > SourceConstants.KEEPALIVE_TIMEOUT && client.getLastKeepAliveRecieved() > 0) {
 			session.close();
 		} else {
-			session.write(LoginPacketCreator.getKeepAlive());
+			session.write(GlobalPacketCreator.getKeepAlive());
 		}
 	}
 

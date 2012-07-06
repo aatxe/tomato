@@ -42,8 +42,8 @@ public class InternalBootstrapper {
 	 * Binds an internal connection to the specified port.
 	 * @param port the port to bind the connection
 	 */
-	public Channel bind(int port) {
-		return this.bind(new InetSocketAddress(port));
+	public Channel connect(int port) {
+		return this.connect(new InetSocketAddress(port));
 	}
 	
 	/**
@@ -52,17 +52,17 @@ public class InternalBootstrapper {
 	 * @param port the port to bind the connection
 	 * @throws IOException if the IP address is invalid (not IPv4)
 	 */
-	public Channel bind(String address, int port) throws IOException {
-		String[] ipArray = address.split(".");
+	public Channel connect(String address, int port) throws IOException {
+		String[] ipArray = address.split("\\.");
 		byte[] addBytes = new byte[4];
 		if (ipArray.length != addBytes.length) {
-			throw new IOException("Invalid IP Address.");
+			throw new IOException("Invalid IP Address. (" + address + ", " + ipArray.length + ")");
 		} else {
 			for (int i = 0; i < addBytes.length; i++) {
 				addBytes[i] = Byte.valueOf(ipArray[i]);
 			}
 		}
-		return this.bind(InetAddress.getByAddress(addBytes), port);
+		return this.connect(InetAddress.getByAddress(addBytes), port);
 	}
 	
 	/**
@@ -71,8 +71,8 @@ public class InternalBootstrapper {
 	 * @param port the port to bind the connection
 	 * @throws UnknownHostException if the IP address is invalid
 	 */
-	public void bind(byte[] address, int port) throws UnknownHostException {
-		this.bind(InetAddress.getByAddress(address), port);
+	public void connect(byte[] address, int port) throws UnknownHostException {
+		this.connect(InetAddress.getByAddress(address), port);
 	}
 	
 	/**
@@ -80,16 +80,16 @@ public class InternalBootstrapper {
 	 * @param address the address to bind the connection
 	 * @param port the port to bind the connection
 	 */
-	public Channel bind(InetAddress address, int port) {
-		return this.bind(new InetSocketAddress(address, port));
+	public Channel connect(InetAddress address, int port) {
+		return this.connect(new InetSocketAddress(address, port));
 	}
 	
 	/**
 	 * Binds an internal connection the specified <code>SocketAddress</code>.
 	 * @param address the <code>SocketAddress</code> to bind the connection
 	 */
-	public Channel bind(SocketAddress address) {
-		ChannelFuture cf = bootstrap.bind(address);
+	public Channel connect(SocketAddress address) {
+		ChannelFuture cf = bootstrap.connect(address);
 		cf.awaitUninterruptibly();
 		bindings.add(cf.getChannel());
 		return cf.getChannel();
@@ -108,7 +108,7 @@ public class InternalBootstrapper {
 	 * @param address the <code>SocketAddress</code> that the connection is bound to
 	 * @return a <code>ChannelFuture</code> representing the unbinding event.
 	 */
-	public ChannelFuture unbind(SocketAddress address) {
+	public ChannelFuture disconnect(SocketAddress address) {
 		for (Channel ch : bindings) {
 			if (ch.getLocalAddress().equals(address)) {
 				return ch.unbind();

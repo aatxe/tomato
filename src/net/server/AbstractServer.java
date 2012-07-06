@@ -2,7 +2,6 @@ package net.server;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
-import net.server.login.LoginServerPipelineFactory;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
@@ -22,8 +21,6 @@ public abstract class AbstractServer implements Server {
 	public AbstractServer() {
 		factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
 		bootstrap = new ServerBootstrap(factory);
-		pipelineFactory = new LoginServerPipelineFactory();
-		bootstrap.setPipelineFactory(pipelineFactory);
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
 	}
@@ -49,6 +46,11 @@ public abstract class AbstractServer implements Server {
 	@Override
 	public ChannelFuture unbind() {
 		return binding.unbind();
+	}
+	
+	@Override
+	public Channel getBinding() {
+		return binding;
 	}
 	
 	@Override

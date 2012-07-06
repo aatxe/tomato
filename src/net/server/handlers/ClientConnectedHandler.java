@@ -16,5 +16,4 @@ public class ClientConnectedHandler extends AbstractMaplePacketHandler {
 		c.scheduleKeepAlive();
 		// TODO: sort out TomatoJuice clients.
 	}
-
 }

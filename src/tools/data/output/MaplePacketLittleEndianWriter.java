@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import net.server.core.ByteArrayMaplePacket;
 import net.server.core.MaplePacket;
 import net.server.opcodes.SendOpcode;
+import net.server.opcodes.internal.InternalRecvOpcode;
+import net.server.opcodes.internal.InternalSendOpcode;
 import tools.HexTool;
 
 /**
@@ -43,6 +45,22 @@ public class MaplePacketLittleEndianWriter extends GenericLittleEndianWriter {
 	 * @param opcode the opcode to write
 	 */
 	public void writeOpcode(SendOpcode opcode) {
+		this.writeShort(opcode.getOpcode());
+	}
+	
+	/**
+	 * Write an opcode as a short to the sequence.
+	 * @param opcode the opcode to write
+	 */
+	public void writeOpcode(InternalSendOpcode opcode) {
+		this.writeShort(opcode.getOpcode());
+	}
+
+	/**
+	 * Write an opcode as a short to the sequence.
+	 * @param opcode the opcode to write
+	 */
+	public void writeOpcode(InternalRecvOpcode opcode) {
 		this.writeShort(opcode.getOpcode());
 	}
 

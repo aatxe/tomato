@@ -8,7 +8,7 @@ package net.server.opcodes.internal;
  * @since alpha
  */
 public enum InternalRecvOpcode {
-	Troll(0);
+	ClientConnected(0x38);
 	private int opcode = 0;
 	
 	/**

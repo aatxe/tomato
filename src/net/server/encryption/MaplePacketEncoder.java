@@ -18,7 +18,7 @@ public class MaplePacketEncoder extends OneToOneEncoder {
 	public Object encode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
 		MaplePacket packet = (MaplePacket) msg;
 		CryptoClient client = (CryptoClient) channel.getAttachment();
-		if (client != null) {
+		if (client != null && client.getSendCrypto() != null) {
 			final byte[] input = packet.getBytes();
 			final byte[] unencrypted = new byte[input.length];
 			System.arraycopy(input, 0, unencrypted, 0, input.length);

@@ -4,6 +4,7 @@ import net.encryption.MapleObfuscator;
 import org.jboss.netty.channel.Channel;
 import tools.server.Scheduler;
 import client.core.CryptoClient;
+import client.core.KeepAliveClient;
 import client.events.KeepAliveEvent;
 import constants.SourceConstants;
 
@@ -13,7 +14,7 @@ import constants.SourceConstants;
  * @version 1.0
  * @since alpha
  */
-public class MapleClient implements CryptoClient {
+public class MapleClient implements CryptoClient, KeepAliveClient {
 	private MapleObfuscator send;
 	private MapleObfuscator recv;
 	private Channel session;
@@ -43,49 +44,34 @@ public class MapleClient implements CryptoClient {
 		return recv;
 	}
 	
-	/**
-	 * Gets whether or not the client is connected.
-	 * @return whether or not the client is connected
-	 */
-	public boolean isConnected() {
-		return session.isConnected();
-	}
-	
-	/**
-	 * Closes the client's session, disconnecting them.
-	 */
-	public void disconnect() {
-		session.close();
-	}
-	
-	/**
-	 * Tells the client that it has recieved a KeepAlive packet.
-	 */
+	@Override
 	public void keepAliveRecieved() {
 		lastKeepAliveRecv = System.currentTimeMillis();
 	}
 	
-	/**
-	 * Gets the timestamp of the last KeepAlive packet received in milliseconds.
-	 * @return the timestamp of the last KeepAlive packet recieved 
-	 */
+	@Override
 	public long getLastKeepAliveRecieved() {
 		return lastKeepAliveRecv;
 	}
 	
-	/**
-	 * Gets the time since the last KeepAlive packet was recieved in milliseconds.
-	 * @return the time since the last KeepAlive packet was recieved
-	 */
+	@Override
 	public long getTimeSinceLastKeepAlive() {
 		return (System.currentTimeMillis() - lastKeepAliveRecv);
 	}
 	
-	/**
-	 * Schedules a <code>Runnable</code> to send KeepAlive packets to the client.
-	 */
+	@Override
 	public void scheduleKeepAlive() {
 		Scheduler.getInstance().scheduleNow(new KeepAliveEvent(session), SourceConstants.KEEPALIVE_PERIOD);
+	}
+	
+	@Override
+	public boolean isConnected() {
+		return session.isConnected();
+	}
+	
+	@Override
+	public void disconnect() {
+		session.close();
 	}
 	
 	/**

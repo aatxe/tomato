@@ -16,13 +16,31 @@ public class InternalClient implements CryptoClient {
 	private Channel session;
 	
 	/**
+	 * Constructs a client with only a session.
+	 * @param session the <code>Channel<code> handling the client's session.
+	 */
+	public InternalClient(Channel session) {
+		this.session = session;
+	}
+	
+	/**
 	 * Constructs a client with a session, and the respective packet obfuscators.
 	 * @param session the <code>Channel<code> handling the client's session.
-	 * @param send the <code>MapleObfuscator</code> handling packets being sent
-	 * @param recv the <code>MapleObfuscator</code> handling packets being received
+	 * @param send the <code>MapleObfuscator</code> for packets being sent
+	 * @param recv the <code>MapleObfuscator</code> for packets being received
 	 */
 	public InternalClient(Channel session, MapleObfuscator send, MapleObfuscator recv) {
 		this.session = session;
+		this.send = send;
+		this.recv = recv;
+	}
+	
+	/**
+	 * Sets the obfuscator for this client.
+	 * @param send the new <code>MapleObfuscator</code> for packets being sent
+	 * @param recv the new <code>MapleObfuscator</code> for packets being received
+	 */
+	public void setObfuscators(MapleObfuscator send, MapleObfuscator recv) {
 		this.send = send;
 		this.recv = recv;
 	}
@@ -37,17 +55,12 @@ public class InternalClient implements CryptoClient {
 		return recv;
 	}
 	
-	/**
-	 * Gets whether or not the client is connected.
-	 * @return whether or not the client is connected
-	 */
+	@Override
 	public boolean isConnected() {
 		return session.isConnected();
 	}
 	
-	/**
-	 * Closes the client's session, disconnecting them.
-	 */
+	@Override
 	public void disconnect() {
 		session.close();
 	}

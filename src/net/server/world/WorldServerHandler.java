@@ -8,7 +8,7 @@ import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 import tools.ConsoleOutput;
 import tools.net.GlobalPacketCreator;
-import client.MapleClient;
+import client.world.ServerClient;
 import constants.ServerConstants;
 
 /**
@@ -29,7 +29,7 @@ public class WorldServerHandler extends AbstractMapleServerHandler {
 	
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
-		ConsoleOutput.print("Channel opened with " + e.getChannel().getRemoteAddress() + ".");
+		ConsoleOutput.print("[World] Channel opened with " + e.getChannel().getRemoteAddress() + ".");
 		connections.add(e.getChannel());
 		byte key[] = {0x13, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, (byte) 0xB4, 0x00, 0x00, 0x00, 0x1B, 0x00, 0x00, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x52, 0x00, 0x00, 0x00};
 		byte ivRecv[] = {69, 92, -101, 64};
@@ -38,7 +38,7 @@ public class WorldServerHandler extends AbstractMapleServerHandler {
 		ivSend[3] = (byte) (Math.random() * 255);
 		MapleObfuscator send = new MapleObfuscator(key, ivSend, (short) (0xFFFF - ServerConstants.MAJOR_VERSION));
 		MapleObfuscator recv = new MapleObfuscator(key, ivRecv, (short) ServerConstants.MAJOR_VERSION);
-		MapleClient client = new MapleClient(e.getChannel(), send, recv);
+		ServerClient client = new ServerClient(e.getChannel(), send, recv);
 		e.getChannel().write(GlobalPacketCreator.getHandshake(ServerConstants.MAJOR_VERSION, ServerConstants.MINOR_VERSION, ivSend, ivRecv));
 		e.getChannel().setAttachment(client);
 	}

@@ -2,6 +2,7 @@ package net.server.world;
 
 import net.server.core.AbstractMaplePacketProcessor;
 import net.server.core.MaplePacketHandler;
+import net.server.handlers.world.ServerClientConnectedHandler;
 import net.server.opcodes.internal.InternalRecvOpcode;
 
 /**
@@ -31,7 +32,8 @@ public class WorldPacketProcessor extends AbstractMaplePacketProcessor {
 
 	@Override
 	public void configure() {
-		// TODO: register some handlers
+		register(InternalRecvOpcode.ClientConnected, new ServerClientConnectedHandler());
+		// TODO: register moar handlers
 	}
 	
 	/**

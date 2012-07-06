@@ -14,7 +14,8 @@ import tools.HexTool;
 import tools.data.input.ByteArrayByteStream;
 import tools.data.input.GenericSeekableLittleEndianAccessor;
 import tools.data.input.SeekableLittleEndianAccessor;
-import client.MapleClient;
+import client.core.Client;
+import client.core.KeepAliveClient;
 import constants.SourceConstants;
 
 public abstract class AbstractMapleServerHandler extends SimpleChannelHandler implements MapleServerHandler {
@@ -24,7 +25,7 @@ public abstract class AbstractMapleServerHandler extends SimpleChannelHandler im
 	@Override
 	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) {
 		synchronized (e.getChannel()) {
-			MapleClient client = (MapleClient) e.getChannel().getAttachment();
+			Client client = (Client) e.getChannel().getAttachment();
 			if (client != null) {
 				try {
 					client.disconnect();
@@ -44,12 +45,13 @@ public abstract class AbstractMapleServerHandler extends SimpleChannelHandler im
 			byte[] data = mp.getBytes();
 			if (SourceConstants.VERBOSE_PACKETS) ConsoleOutput.print("[Recv] " + HexTool.toString(data));
 			SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(data));
-			MapleClient client = (MapleClient) e.getChannel().getAttachment();
+			KeepAliveClient client = (KeepAliveClient) e.getChannel().getAttachment();
 			MaplePacketHandler mph = processor.getHandler(slea.readShort());
 			if (mph != null && mph.validate(client)) {
 				try {
 					mph.process(slea, client);
 				} catch (Throwable t) {
+					t.printStackTrace();
 					// TODO: log all packet processing exceptions.
 				}
 			}

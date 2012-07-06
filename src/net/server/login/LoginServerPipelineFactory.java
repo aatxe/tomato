@@ -13,9 +13,12 @@ import org.jboss.netty.channel.Channels;
  * @since alpha2
  */
 public class LoginServerPipelineFactory implements ChannelPipelineFactory {
+	private LoginServerHandler lsh;
+	
 	@Override
 	public ChannelPipeline getPipeline() {
-		ChannelPipeline cp = Channels.pipeline(new LoginServerHandler());
+		lsh = new LoginServerHandler();
+		ChannelPipeline cp = Channels.pipeline(lsh);
 		cp.addLast("customDecoder", new MaplePacketDecoder());
 		cp.addLast("customEncoder", new MaplePacketEncoder());
 		return cp;

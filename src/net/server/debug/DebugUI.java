@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.Box;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -20,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import net.server.core.ByteArrayMaplePacket;
 import net.server.core.MaplePacket;
 import net.server.login.LoginServer;
+import net.server.world.WorldServer;
 import tools.ConsoleOutput;
 import tools.HexTool;
 import tools.net.LoginPacketCreator;
@@ -33,11 +35,13 @@ import client.MapleAccount;
  */
 public class DebugUI extends JFrame {
 	private static final long serialVersionUID = -8144315523215216792L;
-	private Integer bound;
+	private Integer loginBound, worldBound;
 	private LoginServer login;
+	private WorldServer world;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
+	private JTextField textField_2;
 
 	/**
 	 * Launch the application.
@@ -61,6 +65,7 @@ public class DebugUI extends JFrame {
 	public DebugUI() {
 		login = new LoginServer();
 		login.setPipelineFactory(new DebuggingLoginServerPipelineFactory());
+		world = new WorldServer();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -108,18 +113,35 @@ public class DebugUI extends JFrame {
 		
 		btnBind.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (bound != null && bound.equals(Integer.parseInt(textField.getText()))) {
+				if (loginBound != null && loginBound.equals(Integer.parseInt(textField.getText()))) {
+					if (worldBound != null) {
+						try {
+							login.disconnect("127.0.0.1", worldBound);
+						} catch (IOException ex) {
+							ex.printStackTrace();
+						}
+						ConsoleOutput.print("[Login] Disconnected from World Server.");
+					}
 					login.unbind();
-					bound = null;
+					loginBound = null;
 					btnBind.setText("Bind");
 					textField.setEditable(true);
 					ConsoleOutput.print("[Login] Unbound server on " + textField.getText());
+					
 				} else {
 					login.bind(Integer.parseInt(textField.getText()));
-					bound = Integer.parseInt(textField.getText());
+					loginBound = Integer.parseInt(textField.getText());
 					btnBind.setText("Unbind");
 					textField.setEditable(false);
 					ConsoleOutput.print("[Login] Bound on " + textField.getText());
+					if (worldBound != null) {
+						try {
+							login.connect("127.0.0.1", worldBound);
+						} catch (IOException ex) {
+							ex.printStackTrace();
+						}
+						ConsoleOutput.print("[Login] Connected to World Server.");
+					}
 				}
 			}
 		});
@@ -127,6 +149,44 @@ public class DebugUI extends JFrame {
 		
 		Component horizontalStrut_1 = Box.createHorizontalStrut(20);
 		horizontalBox.add(horizontalStrut_1);
+		
+		Box horizontalBox_3 = Box.createHorizontalBox();
+		tabbedPane.addTab("World", null, horizontalBox_3, null);
+		
+		Component horizontalStrut_6 = Box.createHorizontalStrut(20);
+		horizontalBox_3.add(horizontalStrut_6);
+		
+		JLabel lblWorldServer = new JLabel("World Server:");
+		horizontalBox_3.add(lblWorldServer);
+
+		final JButton btnBind_1 = new JButton("Bind");
+		
+		textField_2 = new JTextField();
+		textField_2.setText("8383");
+		horizontalBox_3.add(textField_2);
+		textField_2.setColumns(10);
+		
+		btnBind_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (worldBound != null && worldBound.equals(Integer.parseInt(textField_2.getText()))) {
+					world.unbind();
+					worldBound = null;
+					btnBind_1.setText("Bind");
+					textField_2.setEditable(true);
+					ConsoleOutput.print("[World] Unbound server on " + textField_2.getText() + ".");
+				} else {
+					textField_2.setEditable(false);
+					world.bind(Integer.parseInt(textField_2.getText()));
+					worldBound = Integer.parseInt(textField_2.getText());
+					btnBind_1.setText("Unbind");
+					ConsoleOutput.print("[World] Bound server on " + textField_2.getText() + ".");
+				}
+			}
+		});
+		horizontalBox_3.add(btnBind_1);
+		
+		Component horizontalStrut_7 = Box.createHorizontalStrut(20);
+		horizontalBox_3.add(horizontalStrut_7);
 		
 		Box horizontalBox_1 = Box.createHorizontalBox();
 		tabbedPane.addTab("Packets", null, horizontalBox_1, null);

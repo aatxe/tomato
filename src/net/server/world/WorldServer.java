@@ -14,6 +14,8 @@ public class WorldServer extends AbstractServer {
 	 */
 	public WorldServer() {
 		super();
+		pipelineFactory = new WorldServerPipelineFactory();
+		bootstrap.setPipelineFactory(pipelineFactory);
 	}
 	
 	/**
@@ -21,7 +23,7 @@ public class WorldServer extends AbstractServer {
 	 * @param port the port to bind the world server to
 	 */
 	public WorldServer(int port) {
-		super();
+		this();
 		this.bind(port);
 	}
 }

@@ -1,7 +1,8 @@
 package net.server.core;
 
 import tools.data.input.SeekableLittleEndianAccessor;
-import client.MapleClient;
+import client.core.Client;
+import client.core.KeepAliveClient;
 
 /**
  * The basic handler for networking actions.
@@ -15,12 +16,12 @@ public interface MaplePacketHandler {
 	 * @param slea the seekable accessor wrapping the packet
 	 * @param c the specified client
 	 */
-	public void process(SeekableLittleEndianAccessor slea, MapleClient c);
+	public void process(SeekableLittleEndianAccessor slea, KeepAliveClient c);
 	
 	/**
 	 * Validates the state of the specified client.
-	 * @param c the client to be validated
+	 * @param client the client to be validated
 	 * @return whether or not the client is valid
 	 */
-	public boolean validate(MapleClient c);
+	public boolean validate(Client client);
 }

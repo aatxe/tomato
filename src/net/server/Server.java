@@ -31,6 +31,11 @@ public interface Server {
 	public ChannelFuture unbind();
 	
 	/**
+	 * Gets the current server's binding.
+	 */
+	public Channel getBinding();
+	
+	/**
 	 * Shutdowns the server completely, freeing up all used resources.
 	 */
 	public void shutdown();

@@ -13,11 +13,18 @@ import org.jboss.netty.channel.Channels;
  * @since alpha2
  */
 public class WorldServerPipelineFactory implements ChannelPipelineFactory {
+	private WorldServerHandler wsh;
+	
 	@Override
 	public ChannelPipeline getPipeline() throws Exception {
-		ChannelPipeline cp = Channels.pipeline(); // TODO: new WorldServerHandler();
+		wsh = new WorldServerHandler();
+		ChannelPipeline cp = Channels.pipeline(wsh);
 		cp.addLast("customDecoder", new MaplePacketDecoder());
 		cp.addLast("customEncoder", new MaplePacketEncoder());
 		return cp;
+	}
+	
+	public WorldServerHandler getWorldServerHandler() {
+		return wsh;
 	}
 }
