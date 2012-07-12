@@ -20,4 +20,10 @@ public class InternalPacketCreator {
 		mplew.writeOpcode(InternalRecvOpcode.ClientConnected);
 		return mplew.getPacket();
 	}
+	
+	public static MaplePacket getKeepAlive() {
+		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(2);
+		mplew.writeOpcode(InternalRecvOpcode.AliveReq);
+		return mplew.getPacket();
+	}
 }

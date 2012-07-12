@@ -16,7 +16,6 @@ import tools.HexTool;
 import tools.data.input.ByteArrayByteStream;
 import tools.data.input.GenericSeekableLittleEndianAccessor;
 import tools.data.input.SeekableLittleEndianAccessor;
-import tools.net.InternalPacketCreator;
 import client.internal.InternalClient;
 import constants.SourceConstants;
 
@@ -52,7 +51,7 @@ public class InternalConnectionHandler extends AbstractMapleServerHandler {
 			MaplePacket mp = (MaplePacket) mpd.decode(ctx, e.getChannel(), (ChannelBuffer) e.getMessage());
 			if (mp != null) {
 				byte[] data = mp.getBytes();
-				if (SourceConstants.VERBOSE_PACKETS) ConsoleOutput.print("[I] [Recv] " + HexTool.toString(data));
+				if (SourceConstants.VERBOSE_PACKETS) ConsoleOutput.print("[Recv] " + HexTool.toString(data));
 				SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(data));
 				InternalClient client = (InternalClient) e.getChannel().getAttachment();
 				InternalPacketHandler iph = processor.getHandler(slea.readShort());
@@ -70,7 +69,6 @@ public class InternalConnectionHandler extends AbstractMapleServerHandler {
 			short length = slea.readShort();
 			if (slea.available() == length) {
 				new HandshakeHandler().process(slea, client);
-				e.getChannel().write(InternalPacketCreator.getConnected());
 			}
 		}
 		

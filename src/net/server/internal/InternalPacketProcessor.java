@@ -1,6 +1,7 @@
 package net.server.internal;
 
 import net.server.core.MaplePacketProcessor;
+import net.server.handlers.internal.KeepAliveHandler;
 import net.server.opcodes.internal.InternalSendOpcode;
 
 /**
@@ -64,6 +65,7 @@ public class InternalPacketProcessor implements MaplePacketProcessor {
 
 	@Override
 	public void configure() {
+		this.register(InternalSendOpcode.AliveReq, new KeepAliveHandler());
 		// TODO: register some moar handlers.
 	}
 	

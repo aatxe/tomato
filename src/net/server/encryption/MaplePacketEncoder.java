@@ -5,7 +5,10 @@ import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
+import tools.ConsoleOutput;
+import tools.HexTool;
 import client.core.CryptoClient;
+import constants.SourceConstants;
 
 /**
  * A one-to-one encoder for converting a <code>MaplePacket</code> to an encrypted <code>ChannelBuffer</code>.
@@ -18,6 +21,7 @@ public class MaplePacketEncoder extends OneToOneEncoder {
 	public Object encode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
 		MaplePacket packet = (MaplePacket) msg;
 		CryptoClient client = (CryptoClient) channel.getAttachment();
+		if (SourceConstants.VERBOSE_PACKETS) ConsoleOutput.print("[Send] " + HexTool.toString(packet.getBytes()));
 		if (client != null && client.getSendCrypto() != null) {
 			final byte[] input = packet.getBytes();
 			final byte[] unencrypted = new byte[input.length];

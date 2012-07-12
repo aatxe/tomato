@@ -55,6 +55,8 @@ public abstract class AbstractMapleServerHandler extends SimpleChannelHandler im
 					// TODO: log all packet processing exceptions.
 				}
 			}
+		} else if (SourceConstants.VERBOSE_PACKETS) {
+			ConsoleOutput.print("Packet dropped.");
 		}
 	}
 	

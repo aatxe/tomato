@@ -8,7 +8,7 @@ package net.server.opcodes.internal;
  * @since alpha
  */
 public enum InternalSendOpcode {
-	AliveReq(0x01);
+	AliveReq(0x11);
 	private int opcode = 0;
 
 	/**

@@ -56,6 +56,11 @@ public class InternalClient implements CryptoClient {
 	}
 	
 	@Override
+	public Channel getChannel() {
+		return this.session;
+	}
+	
+	@Override
 	public boolean isConnected() {
 		return session.isConnected();
 	}

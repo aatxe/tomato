@@ -63,6 +63,11 @@ public class MapleClient implements CryptoClient, KeepAliveClient {
 	public void scheduleKeepAlive() {
 		Scheduler.getInstance().scheduleNow(new KeepAliveEvent(session), SourceConstants.KEEPALIVE_PERIOD);
 	}
+
+	@Override
+	public Channel getChannel() {
+		return this.session;
+	}
 	
 	@Override
 	public boolean isConnected() {

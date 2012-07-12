@@ -5,7 +5,7 @@ import org.jboss.netty.channel.Channel;
 import tools.server.Scheduler;
 import client.core.CryptoClient;
 import client.core.KeepAliveClient;
-import client.events.KeepAliveEvent;
+import client.events.ServerKeepAliveEvent;
 import constants.SourceConstants;
 
 /**
@@ -53,7 +53,12 @@ public class ServerClient implements CryptoClient, KeepAliveClient {
 	
 	@Override
 	public void scheduleKeepAlive() {
-		Scheduler.getInstance().scheduleNow(new KeepAliveEvent(session), SourceConstants.KEEPALIVE_PERIOD);
+		Scheduler.getInstance().scheduleNow(new ServerKeepAliveEvent(session), SourceConstants.KEEPALIVE_PERIOD);
+	}
+
+	@Override
+	public Channel getChannel() {
+		return this.session;
 	}
 	
 	@Override
