@@ -1,7 +1,9 @@
 package org.tomato.tools.data.input;
 
 import java.io.IOException;
-import org.tomato.tools.ConsoleOutput;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A <code>SeekableLittleEndianAccessor</code> wrapping a <code>ByteArrayByteStream</code>.
@@ -10,6 +12,8 @@ import org.tomato.tools.ConsoleOutput;
  * @since alpha
  */
 public class GenericSeekableLittleEndianAccessor extends GenericLittleEndianAccessor implements SeekableLittleEndianAccessor {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GenericLittleEndianAccessor.class);
+    
 	private SeekableInputStreamBytestream bs;
 	
 	/**
@@ -26,7 +30,7 @@ public class GenericSeekableLittleEndianAccessor extends GenericLittleEndianAcce
 		try {
 			bs.seek(offset);
 		} catch (IOException e) {
-			ConsoleOutput.print("Failed to seek: " + e);
+			LOGGER.error("Failed to seek", e);
 		}
 	}
 	
@@ -35,7 +39,7 @@ public class GenericSeekableLittleEndianAccessor extends GenericLittleEndianAcce
 		try {
 			return bs.getPosition();
 		} catch (IOException e) {
-			ConsoleOutput.print("Failed to get position: " + e);
+			LOGGER.error("Failed to get position: " + e);
 			return -1;
 		}
 	}

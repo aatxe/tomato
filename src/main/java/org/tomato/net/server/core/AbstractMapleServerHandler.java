@@ -1,5 +1,7 @@
 package org.tomato.net.server.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tomato.net.server.encryption.MaplePacketDecoder;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -9,7 +11,6 @@ import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
-import org.tomato.tools.ConsoleOutput;
 import org.tomato.tools.HexTool;
 import org.tomato.tools.data.input.ByteArrayByteStream;
 import org.tomato.tools.data.input.GenericSeekableLittleEndianAccessor;
@@ -19,6 +20,8 @@ import org.tomato.client.core.KeepAliveClient;
 import org.tomato.constants.SourceConstants;
 
 public abstract class AbstractMapleServerHandler extends SimpleChannelHandler implements MapleServerHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractMapleServerHandler.class);
+    
 	private ChannelGroup connections = new DefaultChannelGroup();
 	private AbstractMaplePacketProcessor processor;
 	
@@ -43,7 +46,7 @@ public abstract class AbstractMapleServerHandler extends SimpleChannelHandler im
 		MaplePacket mp = (MaplePacket) mpd.decode(ctx, e.getChannel(), (ChannelBuffer) e.getMessage());
 		if (mp != null) {
 			byte[] data = mp.getBytes();
-			if (SourceConstants.VERBOSE_PACKETS) ConsoleOutput.print("[Recv] " + HexTool.toString(data));
+			if (SourceConstants.VERBOSE_PACKETS) LOGGER.debug("Received {}", HexTool.toString(data));
 			SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(data));
 			KeepAliveClient client = (KeepAliveClient) e.getChannel().getAttachment();
 			MaplePacketHandler mph = processor.getHandler(slea.readShort());
@@ -56,7 +59,7 @@ public abstract class AbstractMapleServerHandler extends SimpleChannelHandler im
 				}
 			}
 		} else if (SourceConstants.VERBOSE_PACKETS) {
-			ConsoleOutput.print("Packet dropped.");
+			LOGGER.debug("Packet dropped");
 		}
 	}
 	

@@ -2,7 +2,9 @@ package org.tomato.tools.data.input;
 
 import java.io.IOException;
 import java.io.InputStream;
-import org.tomato.tools.ConsoleOutput;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A <code>ByteInputStream</code> wrapping an <code>InputStream</code>.
@@ -11,6 +13,8 @@ import org.tomato.tools.ConsoleOutput;
  * @since alpha
  */
 public class InputStreamByteStream implements ByteInputStream {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InputStreamByteStream.class);
+    
 	private InputStream is;
 	private long bytesRead = 0;
 
@@ -46,7 +50,7 @@ public class InputStreamByteStream implements ByteInputStream {
 		try {
 			return is.available();
 		} catch (IOException e) {
-			ConsoleOutput.print("Error: " + e);
+			LOGGER.error("Caught IO exception", e);
 			return 0;
 		}
 	}

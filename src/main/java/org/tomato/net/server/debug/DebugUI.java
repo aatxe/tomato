@@ -18,11 +18,13 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tomato.net.server.core.ByteArrayMaplePacket;
 import org.tomato.net.server.core.MaplePacket;
 import org.tomato.net.server.login.LoginServer;
 import org.tomato.net.server.world.WorldServer;
-import org.tomato.tools.ConsoleOutput;
 import org.tomato.tools.HexTool;
 import org.tomato.tools.net.LoginPacketCreator;
 import org.tomato.client.MapleAccount;
@@ -34,6 +36,8 @@ import org.tomato.client.MapleAccount;
  * @since alpha
  */
 public class DebugUI extends JFrame {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DebugUI.class);
+    
 	private static final long serialVersionUID = -8144315523215216792L;
 	private Integer loginBound, worldBound;
 	private LoginServer login;
@@ -120,27 +124,27 @@ public class DebugUI extends JFrame {
 						} catch (IOException ex) {
 							ex.printStackTrace();
 						}
-						ConsoleOutput.print("[Login] Disconnected from World Server.");
+						LOGGER.warn("Disconnected from World Server");
 					}
 					login.unbind();
 					loginBound = null;
 					btnBind.setText("Bind");
 					textField.setEditable(true);
-					ConsoleOutput.print("[Login] Unbound server on " + textField.getText());
+					LOGGER.warn("Unbound server on {}", textField.getText());
 					
 				} else {
 					login.bind(Integer.parseInt(textField.getText()));
 					loginBound = Integer.parseInt(textField.getText());
 					btnBind.setText("Unbind");
 					textField.setEditable(false);
-					ConsoleOutput.print("[Login] Bound on " + textField.getText());
+					LOGGER.info("Bound on {}", textField.getText());
 					if (worldBound != null) {
 						try {
 							login.connect("127.0.0.1", worldBound);
 						} catch (IOException ex) {
 							ex.printStackTrace();
 						}
-						ConsoleOutput.print("[Login] Connected to World Server.");
+						LOGGER.info("Connected to World Server.");
 					}
 				}
 			}
@@ -173,13 +177,13 @@ public class DebugUI extends JFrame {
 					worldBound = null;
 					btnBind_1.setText("Bind");
 					textField_2.setEditable(true);
-					ConsoleOutput.print("[World] Unbound server on " + textField_2.getText() + ".");
+					LOGGER.warn("[World] Unbound server on " + textField_2.getText() + ".");
 				} else {
 					textField_2.setEditable(false);
 					world.bind(Integer.parseInt(textField_2.getText()));
 					worldBound = Integer.parseInt(textField_2.getText());
 					btnBind_1.setText("Unbind");
-					ConsoleOutput.print("[World] Bound server on " + textField_2.getText() + ".");
+					LOGGER.info("[World] Bound server on " + textField_2.getText() + ".");
 				}
 			}
 		});
@@ -202,7 +206,7 @@ public class DebugUI extends JFrame {
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				((DebuggingLoginServerPipelineFactory) login.getPipelineFactory()).debugWriteAll(new ByteArrayMaplePacket(HexTool.getByteArrayFromHexString(textField_1.getText())));
-				ConsoleOutput.print("[Send] " + textField_1.getText());
+				LOGGER.info("[Send] " + textField_1.getText());
 			}
 		});
 		horizontalBox_1.add(btnSend);
@@ -221,7 +225,7 @@ public class DebugUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				MaplePacket mp = LoginPacketCreator.getLoginSuccess(MapleAccount.rice());
 				((DebuggingLoginServerPipelineFactory) login.getPipelineFactory()).debugWriteAll(mp);
-				ConsoleOutput.print("[Sent] " + HexTool.toString(mp.getBytes()));
+				LOGGER.info("[Sent] " + HexTool.toString(mp.getBytes()));
 			}
 		});
 		horizontalBox_2.add(btnRice);
@@ -235,6 +239,6 @@ public class DebugUI extends JFrame {
 		mc.redirectOut(null, System.out);
 		mc.redirectErr(Color.RED, System.err);
 		
-		ConsoleOutput.print("[Debug] Debugger attached.");
+		LOGGER.info("[Debug] Debugger attached.");
 	}
 }

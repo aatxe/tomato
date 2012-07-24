@@ -5,3 +5,6 @@
 bin/
 doc/
 target/
+.idea/
+*.iml
+.idea_modules/

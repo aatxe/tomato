@@ -1,7 +1,8 @@
 package org.tomato.net.server.handlers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tomato.net.server.core.AbstractMaplePacketHandler;
-import org.tomato.tools.ConsoleOutput;
 import org.tomato.tools.data.input.SeekableLittleEndianAccessor;
 import org.tomato.client.MapleClient;
 
@@ -12,9 +13,10 @@ import org.tomato.client.MapleClient;
  * @since alpha
  */
 public class ClientErrorHandler extends AbstractMaplePacketHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientErrorHandler.class);
+
 	@Override
 	public void process(SeekableLittleEndianAccessor slea, MapleClient c) {
-		ConsoleOutput.print("[Decode] " + slea.readMapleAsciiString());
-		// TODO: actually log dis shit.
+        LOGGER.error(slea.readMapleAsciiString());
 	}
 }

@@ -1,5 +1,7 @@
 package org.tomato.net.server.internal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tomato.net.server.core.AbstractMapleServerHandler;
 import org.tomato.net.server.core.MaplePacket;
 import org.tomato.net.server.core.MaplePacketProcessor;
@@ -11,7 +13,6 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
-import org.tomato.tools.ConsoleOutput;
 import org.tomato.tools.HexTool;
 import org.tomato.tools.data.input.ByteArrayByteStream;
 import org.tomato.tools.data.input.GenericSeekableLittleEndianAccessor;
@@ -26,6 +27,8 @@ import org.tomato.constants.SourceConstants;
  * @since alpha2
  */
 public class InternalConnectionHandler extends AbstractMapleServerHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(InternalConnectionHandler.class);
+
 	private ChannelGroup connections = new DefaultChannelGroup("internal-connections");
 	private InternalPacketProcessor processor;
 	
@@ -38,7 +41,7 @@ public class InternalConnectionHandler extends AbstractMapleServerHandler {
 	
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) {
-		ConsoleOutput.print("[Internal] Channel opened with " + e.getChannel().getRemoteAddress() + ".");
+        LOGGER.debug("Channel opened with {}", e.getChannel().getRemoteAddress());
 		connections.add(e.getChannel());
 		InternalClient c = new InternalClient(e.getChannel());
 		e.getChannel().setAttachment(c);
@@ -51,7 +54,7 @@ public class InternalConnectionHandler extends AbstractMapleServerHandler {
 			MaplePacket mp = (MaplePacket) mpd.decode(ctx, e.getChannel(), (ChannelBuffer) e.getMessage());
 			if (mp != null) {
 				byte[] data = mp.getBytes();
-				if (SourceConstants.VERBOSE_PACKETS) ConsoleOutput.print("[Recv] " + HexTool.toString(data));
+				if (SourceConstants.VERBOSE_PACKETS) LOGGER.debug("Received {}", HexTool.toString(data));
 				SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(data));
 				InternalClient client = (InternalClient) e.getChannel().getAttachment();
 				InternalPacketHandler iph = processor.getHandler(slea.readShort());

@@ -7,7 +7,9 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import org.tomato.tools.ConsoleOutput;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tomato.tools.HexTool;
 
 /**
@@ -17,6 +19,8 @@ import org.tomato.tools.HexTool;
  * @since alpha
  */
 public class MapleObfuscator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MapleObfuscator.class);
+
 	private byte iv[];
 	private Cipher cipher;
 	private short mapleVersion;
@@ -33,9 +37,9 @@ public class MapleObfuscator {
 		try {
 			cipher = Cipher.getInstance("AES");
 		} catch (NoSuchAlgorithmException e) {
-			ConsoleOutput.print("ERROR: " + e);
+            LOGGER.error("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
-			ConsoleOutput.print("ERROR: " + e);
+            LOGGER.error("No such padding", e);
 		}
 		try {
 			cipher.init(Cipher.ENCRYPT_MODE, skeySpec);

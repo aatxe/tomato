@@ -2,7 +2,6 @@ package org.tomato.tools.data.input;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import org.tomato.tools.ConsoleOutput;
 
 /**
  * A <code>SeekableInputStreamBytestream</code> wrapping a <code>RandomAccessFile</code>.
@@ -57,7 +56,7 @@ public class RandomAccessByteStream implements SeekableInputStreamBytestream {
 		try {
 			return raf.length() - raf.getFilePointer();
 		} catch (IOException e) {
-			ConsoleOutput.print("Error: " + e);
+			e.printStackTrace();
 			return -1;
 		}
 	}

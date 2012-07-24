@@ -1,11 +1,12 @@
 package org.tomato.net.server.encryption;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tomato.net.server.core.MaplePacket;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.handler.codec.oneone.OneToOneEncoder;
-import org.tomato.tools.ConsoleOutput;
 import org.tomato.tools.HexTool;
 import org.tomato.client.core.CryptoClient;
 import org.tomato.constants.SourceConstants;
@@ -17,11 +18,13 @@ import org.tomato.constants.SourceConstants;
  * @since alpha
  */
 public class MaplePacketEncoder extends OneToOneEncoder {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MaplePacketEncoder.class);
+    
 	@Override
 	public Object encode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
 		MaplePacket packet = (MaplePacket) msg;
 		CryptoClient client = (CryptoClient) channel.getAttachment();
-		if (SourceConstants.VERBOSE_PACKETS) ConsoleOutput.print("[Send] " + HexTool.toString(packet.getBytes()));
+		if (SourceConstants.VERBOSE_PACKETS) LOGGER.debug("Sending {}", HexTool.toString(packet.getBytes()));
 		if (client != null && client.getSendCrypto() != null) {
 			final byte[] input = packet.getBytes();
 			final byte[] unencrypted = new byte[input.length];
