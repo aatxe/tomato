@@ -7,11 +7,4 @@ package org.tomato.client.core;
  * @since alpha
  */
 public class MapleObject {
-	/**
-	 * Converts the object into a saveable object.
-	 * @return the object as a <code>SaveObject</code>
-	 */
-	public SaveObject toSaveObject() {
-		return null;
-	}
 }
