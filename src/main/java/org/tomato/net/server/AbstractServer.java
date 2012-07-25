@@ -1,8 +1,10 @@
 package org.tomato.net.server;
 
 import java.net.InetSocketAddress;
+import java.nio.ByteOrder;
 import java.util.concurrent.Executors;
 import org.jboss.netty.bootstrap.ServerBootstrap;
+import org.jboss.netty.buffer.HeapChannelBufferFactory;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
@@ -23,6 +25,7 @@ public abstract class AbstractServer implements Server {
 		bootstrap = new ServerBootstrap(factory);
 		bootstrap.setOption("tcpNoDelay", true);
 		bootstrap.setOption("keepAlive", true);
+	    bootstrap.setOption("child.bufferFactory", new HeapChannelBufferFactory(ByteOrder.LITTLE_ENDIAN));
 	}
 	
 	@Override
