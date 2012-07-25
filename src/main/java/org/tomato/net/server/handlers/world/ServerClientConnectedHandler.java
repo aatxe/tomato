@@ -1,7 +1,7 @@
 package org.tomato.net.server.handlers.world;
 
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.tomato.net.server.world.AbstractWorldPacketHandler;
-import org.tomato.tools.data.input.SeekableLittleEndianAccessor;
 import org.tomato.client.world.ServerClient;
 
 /**
@@ -12,7 +12,7 @@ import org.tomato.client.world.ServerClient;
  */
 public class ServerClientConnectedHandler extends AbstractWorldPacketHandler {
 	@Override
-	public void process(SeekableLittleEndianAccessor slea, ServerClient c) {
+	public void process(ChannelBuffer buffer, ServerClient c) {
 		c.scheduleKeepAlive();
 	}
 }

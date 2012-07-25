@@ -1,8 +1,10 @@
 package org.tomato.tools.net;
 
-import org.tomato.net.server.core.MaplePacket;
+import java.nio.ByteOrder;
+
+import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.tomato.net.server.opcodes.SendOpcode;
-import org.tomato.tools.data.output.MaplePacketLittleEndianWriter;
 import org.tomato.constants.ServerConstants;
 
 public class GlobalPacketCreator {
@@ -14,25 +16,25 @@ public class GlobalPacketCreator {
 	 * @param recvIv the initialization vector for received packets
 	 * @return the basic introduction packet to send to new clients
 	 */
-	public static MaplePacket getHandshake(short majorVersion, short minorVersion, byte[] sendIv, byte[] recvIv) {
-		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(16);
-		mplew.writeShort(0x0E);
-		mplew.writeShort(majorVersion);
-		mplew.writeShort(minorVersion);
-		mplew.write(0x31); // Unknown
-		mplew.write(recvIv);
-		mplew.write(sendIv);
-		mplew.write(ServerConstants.REGION_CODE);
-		return mplew.getPacket();
+	public static ChannelBuffer getHandshake(short majorVersion, short minorVersion, byte[] sendIv, byte[] recvIv) {
+		ChannelBuffer buffer = ChannelBuffers.buffer(ByteOrder.LITTLE_ENDIAN, 16);
+		buffer.writeShort(0x0E);
+		buffer.writeShort(majorVersion);
+		buffer.writeShort(minorVersion);
+		buffer.writeByte(0x31); // Unknown
+		buffer.writeBytes(recvIv);
+		buffer.writeBytes(sendIv);
+		buffer.writeByte(ServerConstants.REGION_CODE);
+		return buffer;
 	}
 	
 	/**
 	 * Gets the packet to trigger a KeepAlive event with a org.tomato.client.
 	 * @return the packet to trigger a KeepAlive event with a org.tomato.client
 	 */
-	public static MaplePacket getKeepAlive() {
-		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(2);
-		mplew.writeOpcode(SendOpcode.AliveReq);
-		return mplew.getPacket();
+	public static ChannelBuffer getKeepAlive() {
+		ChannelBuffer buffer = ChannelBuffers.buffer(ByteOrder.LITTLE_ENDIAN, 2);
+		buffer.writeShort(SendOpcode.AliveReq.getOpcode());
+		return buffer;
 	}
 }

@@ -1,7 +1,7 @@
 package org.tomato.net.server.handlers;
 
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.tomato.net.server.core.AbstractMaplePacketHandler;
-import org.tomato.tools.data.input.SeekableLittleEndianAccessor;
 import org.tomato.client.MapleClient;
 
 /**
@@ -12,7 +12,7 @@ import org.tomato.client.MapleClient;
  */
 public class ClientConnectedHandler extends AbstractMaplePacketHandler {
 	@Override
-	public void process(SeekableLittleEndianAccessor slea, MapleClient c) {
+	public void process(ChannelBuffer buffer, MapleClient c) {
 		c.scheduleKeepAlive();
 		// TODO: sort out TomatoJuice clients.
 	}

@@ -1,5 +1,7 @@
 package org.tomato.net.server.internal;
 
+import java.nio.ByteOrder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tomato.net.server.core.AbstractMapleServerHandler;
@@ -8,15 +10,13 @@ import org.tomato.net.server.core.MaplePacketProcessor;
 import org.tomato.net.server.encryption.MaplePacketDecoder;
 import org.tomato.net.server.handlers.internal.HandshakeHandler;
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.tomato.tools.HexTool;
-import org.tomato.tools.data.input.ByteArrayByteStream;
-import org.tomato.tools.data.input.GenericSeekableLittleEndianAccessor;
-import org.tomato.tools.data.input.SeekableLittleEndianAccessor;
 import org.tomato.client.internal.InternalClient;
 import org.tomato.constants.SourceConstants;
 
@@ -55,23 +55,23 @@ public class InternalConnectionHandler extends AbstractMapleServerHandler {
 			if (mp != null) {
 				byte[] data = mp.getBytes();
 				if (SourceConstants.VERBOSE_PACKETS) LOGGER.debug("Received {}", HexTool.toString(data));
-				SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(data));
+				ChannelBuffer buffer = ChannelBuffers.wrappedBuffer(ByteOrder.LITTLE_ENDIAN, data);
 				InternalClient client = (InternalClient) e.getChannel().getAttachment();
-				InternalPacketHandler iph = processor.getHandler(slea.readShort());
+				InternalPacketHandler iph = processor.getHandler(buffer.readShort());
 				if (iph != null && iph.validate(client)) {
 					try {
-						iph.process(slea, client);
+						iph.process(buffer, client);
 					} catch (Throwable t) {
 						// TODO: log all packet processing exceptions.
 					}
 				}
 			}
 		} catch (NullPointerException ex) {
-			SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(((ChannelBuffer) e.getMessage()).array()));
+			ChannelBuffer buffer = (ChannelBuffer) e.getMessage();
 			InternalClient client = (InternalClient) e.getChannel().getAttachment();
-			short length = slea.readShort();
-			if (slea.available() == length) {
-				new HandshakeHandler().process(slea, client);
+			short length = buffer.readShort();
+			if (buffer.readableBytes() == length) {
+				new HandshakeHandler().process(buffer, client);
 			}
 		}
 		

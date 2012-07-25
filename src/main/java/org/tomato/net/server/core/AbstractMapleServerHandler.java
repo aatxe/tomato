@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tomato.net.server.encryption.MaplePacketDecoder;
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
@@ -12,9 +13,6 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.tomato.tools.HexTool;
-import org.tomato.tools.data.input.ByteArrayByteStream;
-import org.tomato.tools.data.input.GenericSeekableLittleEndianAccessor;
-import org.tomato.tools.data.input.SeekableLittleEndianAccessor;
 import org.tomato.client.core.Client;
 import org.tomato.client.core.KeepAliveClient;
 import org.tomato.constants.SourceConstants;
@@ -47,12 +45,12 @@ public abstract class AbstractMapleServerHandler extends SimpleChannelHandler im
 		if (mp != null) {
 			byte[] data = mp.getBytes();
 			if (SourceConstants.VERBOSE_PACKETS) LOGGER.debug("Received {}", HexTool.toString(data));
-			SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(data));
+			ChannelBuffer buffer = ChannelBuffers.wrappedBuffer(data);
 			KeepAliveClient client = (KeepAliveClient) e.getChannel().getAttachment();
-			MaplePacketHandler mph = processor.getHandler(slea.readShort());
+			MaplePacketHandler mph = processor.getHandler(buffer.readShort());
 			if (mph != null && mph.validate(client)) {
 				try {
-					mph.process(slea, client);
+					mph.process(buffer, client);
 				} catch (Throwable t) {
 					t.printStackTrace();
 					// TODO: log all packet processing exceptions.

@@ -1,6 +1,6 @@
 package org.tomato.net.server.internal;
 
-import org.tomato.tools.data.input.SeekableLittleEndianAccessor;
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.tomato.client.internal.InternalClient;
 
 /**
@@ -15,7 +15,7 @@ public abstract class InternalPacketHandler {
 	 * @param slea the seekable accessor wrapping the packet
 	 * @param c the specified org.tomato.client
 	 */
-	public abstract void process(SeekableLittleEndianAccessor slea, InternalClient c);
+	public abstract void process(ChannelBuffer buffer, InternalClient c);
 	
 	/**
 	 * Validates the state of the specified org.tomato.client.

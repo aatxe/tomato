@@ -1,11 +1,11 @@
 package org.tomato.net.server.handlers.internal;
 
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tomato.net.encryption.MapleObfuscator;
 import org.tomato.net.server.internal.InternalPacketHandler;
 import org.tomato.tools.HexTool;
-import org.tomato.tools.data.input.SeekableLittleEndianAccessor;
 import org.tomato.tools.net.InternalPacketCreator;
 import org.tomato.client.internal.InternalClient;
 import org.tomato.constants.ServerConstants;
@@ -14,21 +14,21 @@ public class HandshakeHandler extends InternalPacketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(HandshakeHandler.class);
 
 	@Override
-	public void process(SeekableLittleEndianAccessor slea, InternalClient c) {
-		short majorVersion = slea.readShort();
-		short minorVersion = slea.readShort();
+	public void process(ChannelBuffer buffer, InternalClient c) {
+		short majorVersion = buffer.readShort();
+		short minorVersion = buffer.readShort();
 		if (majorVersion != ServerConstants.MAJOR_VERSION || minorVersion != ServerConstants.MINOR_VERSION) {
             LOGGER.warn("Server versions do not match");
 			return;
 		}
-		slea.readByte(); // throw it away. it's useless.
+		buffer.skipBytes(1); // throw it away. it's useless.
 		byte[] sendIv = new byte[4];
 		for (int i = 0; i < sendIv.length; i++) {
-			sendIv[i] = slea.readByte();
+			sendIv[i] = buffer.readByte();
 		}
 		byte[] recvIv = new byte[4];
 		for (int i = 0; i < recvIv.length; i++) {
-			recvIv[i] = slea.readByte();
+			recvIv[i] = buffer.readByte();
 		}
 		LOGGER.debug("Send IV: " + HexTool.toString(sendIv));
 		LOGGER.debug("Recv IV: " + HexTool.toString(recvIv));

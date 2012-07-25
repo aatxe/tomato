@@ -1,7 +1,7 @@
 package org.tomato.net.server.world;
 
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.tomato.net.server.core.MaplePacketHandler;
-import org.tomato.tools.data.input.SeekableLittleEndianAccessor;
 import org.tomato.client.core.Client;
 import org.tomato.client.core.KeepAliveClient;
 import org.tomato.client.world.ServerClient;
@@ -14,8 +14,8 @@ import org.tomato.client.world.ServerClient;
  */
 public abstract class AbstractWorldPacketHandler implements MaplePacketHandler {
 	@Override
-	public void process(SeekableLittleEndianAccessor slea, KeepAliveClient c) {
-		this.process(slea, (ServerClient) c);
+	public void process(ChannelBuffer buffer, KeepAliveClient c) {
+		this.process(buffer, (ServerClient) c);
 	}
 	
 	@Override
@@ -25,8 +25,8 @@ public abstract class AbstractWorldPacketHandler implements MaplePacketHandler {
 	
 	/**
 	 * Processes a packet wrapped by a seekable accessor for a specified org.tomato.client.
-	 * @param slea the seekable accessor wrapping the packet
+	 * @param buffer the seekable accessor wrapping the packet
 	 * @param c the specified org.tomato.client
 	 */
-	public abstract void process(SeekableLittleEndianAccessor slea, ServerClient c);
+	public abstract void process(ChannelBuffer buffer, ServerClient c);
 }

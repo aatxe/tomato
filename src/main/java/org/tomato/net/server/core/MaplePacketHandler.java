@@ -1,6 +1,6 @@
 package org.tomato.net.server.core;
 
-import org.tomato.tools.data.input.SeekableLittleEndianAccessor;
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.tomato.client.core.Client;
 import org.tomato.client.core.KeepAliveClient;
 
@@ -16,7 +16,7 @@ public interface MaplePacketHandler {
 	 * @param slea the seekable accessor wrapping the packet
 	 * @param c the specified org.tomato.client
 	 */
-	public void process(SeekableLittleEndianAccessor slea, KeepAliveClient c);
+	public void process(ChannelBuffer slea, KeepAliveClient c);
 	
 	/**
 	 * Validates the state of the specified org.tomato.client.

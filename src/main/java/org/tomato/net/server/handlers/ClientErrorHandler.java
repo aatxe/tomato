@@ -1,9 +1,11 @@
 package org.tomato.net.server.handlers;
 
+import java.nio.charset.Charset;
+
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tomato.net.server.core.AbstractMaplePacketHandler;
-import org.tomato.tools.data.input.SeekableLittleEndianAccessor;
 import org.tomato.client.MapleClient;
 
 /**
@@ -16,7 +18,8 @@ public class ClientErrorHandler extends AbstractMaplePacketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientErrorHandler.class);
 
 	@Override
-	public void process(SeekableLittleEndianAccessor slea, MapleClient c) {
-        LOGGER.error(slea.readMapleAsciiString());
+	public void process(ChannelBuffer buffer, MapleClient c) {
+	    // TODO refactor
+        LOGGER.error(buffer.readBytes(buffer.readUnsignedShort()).toString(Charset.forName("ascii")));
 	}
 }

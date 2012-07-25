@@ -19,10 +19,11 @@ import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 
+import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.ChannelBuffers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tomato.net.server.core.ByteArrayMaplePacket;
-import org.tomato.net.server.core.MaplePacket;
 import org.tomato.net.server.login.LoginServer;
 import org.tomato.net.server.world.WorldServer;
 import org.tomato.tools.HexTool;
@@ -223,9 +224,9 @@ public class DebugUI extends JFrame {
 		JButton btnRice = new JButton("Rice");
 		btnRice.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MaplePacket mp = LoginPacketCreator.getLoginSuccess(MapleAccount.rice());
-				((DebuggingLoginServerPipelineFactory) login.getPipelineFactory()).debugWriteAll(mp);
-				LOGGER.info("[Sent] " + HexTool.toString(mp.getBytes()));
+				ChannelBuffer buffer = LoginPacketCreator.getLoginSuccess(MapleAccount.rice());
+				((DebuggingLoginServerPipelineFactory) login.getPipelineFactory()).debugWriteAll(buffer);
+				LOGGER.info("[Sent] " + ChannelBuffers.hexDump(buffer));
 			}
 		});
 		horizontalBox_2.add(btnRice);
