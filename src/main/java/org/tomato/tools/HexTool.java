@@ -18,7 +18,7 @@ public class HexTool {
 	 */
 	private static String toString(byte byteValue) {
 		int tmp = byteValue << 8;
-		char[] retstr = new char[] {HEX[(tmp >> 12) & 0x0F], HEX[(tmp >> 8) & 0x0F]};
+		char[] retstr = new char[]{HEX[(tmp >> 12) & 0x0F], HEX[(tmp >> 8) & 0x0F]};
 		return String.valueOf(retstr);
 	}
 
