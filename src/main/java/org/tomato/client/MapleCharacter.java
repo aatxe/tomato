@@ -1,13 +1,11 @@
 package org.tomato.client;
 
-import org.tomato.client.core.MapleObject;
-
 /**
- * A <code>MapleObject</code> representing a player character.
+ * A representation of a playable character.
  * @author tomato
  * @version 0.1
  * @since alpha2
  */
-public class MapleCharacter extends MapleObject {
+public class MapleCharacter {
 
 }

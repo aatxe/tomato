@@ -1,15 +1,14 @@
 package org.tomato.client;
 
 import java.util.Date;
-import org.tomato.client.core.MapleObject;
 
 /**
- * A <code>MapleObject</code> representing a user's account.
+ * A representation of a user account.
  * @author tomato
  * @version 1.0
  * @since alpha2
  */
-public class MapleAccount extends MapleObject {
+public class MapleAccount {
 	private int accountId;
 	private String accountName;
 	private byte gender;
