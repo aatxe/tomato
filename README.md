@@ -7,6 +7,6 @@ support it out of the box and all that is required is to import the
 project as a Maven one, not as a standard Java project.
 
 ## Acknowledgements ##
-* tomato, the primary developer.
+* tomato (aaronweiss74), the primary developer.
 * XiaoKia, the packet and MapleStory expert.
 * strax, the Java guru.
