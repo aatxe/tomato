@@ -1,0 +1,20 @@
+//get_gender_from_id
+//Revision 1 : 2012/07/03 by XiaoKia
+
+int get_gender_from_id(int itemId)
+{
+  if ( itemId / 1000000 != 1 )
+    return 2;
+  temp = itemId / 1000 % 10;
+  if ( temp > 0 )
+  {
+    if ( temp != 1 )
+      return 2;
+    result = 1;
+  }
+  else
+  {
+    result = 0;
+  }
+  return result;
+}

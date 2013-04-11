@@ -1,0 +1,158 @@
+//is_correct_bodypart
+//Revision 1 : 2012/07/03 by XiaoKia
+
+bool is_correct_bodypart(int itemid, int slot, int idk)
+{
+	int gender = get_gender_from_id(itemid);
+	if (idk == 2 || gender == 2 || gender == idk)
+	{
+		switch (itemid / 10000)
+		{
+			case 100:
+				if ( slot != 1 && slot != 1200 )
+				  return false;
+				return true;
+			case 101:
+				if ( slot == 2 || slot == 1202 )
+				  return true;
+				return false;
+			case 102:
+				return slot == 3;
+			case 103:
+				return slot == 4;
+			case 104:
+			case 105:
+				if ( slot == 5 || slot == 1203 )
+				  return true;
+				return false;
+			case 106:
+				if ( slot == 6 || slot == 1204 )
+				  return true;
+				return false;
+			case 107:
+				if ( slot == 7 || slot == 1205 )
+				  return true;
+				return false;
+			case 108:
+				if ( slot == 8 || slot == 1206 )
+				  return true;
+				return false;
+			case 109:
+			case 119:
+			case 134:
+			case 135:
+				return slot == 10;
+			case 110:
+				if ( slot == 9 || slot == 1201 )
+				  return true;
+				return false;
+			case 111:
+				if ( slot == 12 || slot == 13 || slot == 15 || slot == 16 )
+				  return true;
+				return false;
+			case 112:
+				if ( slot == 17 || slot == 61 )
+				  return true;
+				return false;
+			case 113:
+				return slot == 50;
+			case 114:
+				return slot == 49;
+			case 115:
+				return slot == 51;
+			case 116:
+				return slot == 52;
+			case 117:
+				return slot == 55;
+			case 118:
+				return slot == 56;
+			case 165:
+				return slot == 1104;
+			case 166:
+				return slot == 53;
+			case 167:
+				return slot == 54;
+			case 161:
+				return slot == 1100;
+			case 162:
+				return slot == 1101;
+			case 163:
+				return slot == 1102;
+			case 164:
+				return slot == 1103;
+			case 190:
+				return slot == 18;
+			case 191:
+				return slot == 19;
+			case 192:
+				return slot == 20;
+			case 194:
+				return slot == 1000;
+			case 195:
+				return slot == 1001;
+			case 196:
+				return slot == 1002;
+			case 197:
+				return slot == 1003;
+			case 180:
+				v5 = slot;
+				if ( itemid == 1802100 )
+				  if ( v5 == 21 || v5 == 31 || v5 == 39 )
+					return true;
+				  return false;
+				if ( slot == 14 || slot == 30 || slot == 38 )
+				  return true;
+				return false;
+			case 181:
+				switch ( itemid )
+				{
+					case 1812001:
+						if ( slot == 22 || slot == 33 || slot == 41 )
+						  return true;
+						result = 0;
+						break;
+					case 1812000:
+						if ( slot == 23 || slot == 34 || slot == 42 )
+						  return true;
+						result = 0;
+						break;
+					case 1812002:
+						result = slot == 24;
+						break;
+					case 1812003:
+						result = slot == 25;
+						break;
+					case 1812004:
+						if ( slot == 26 || slot == 35 || slot == 43 )
+						  return true;
+						result = 0;
+						break;
+					case 1812005:
+						if ( slot == 27 || slot == 36 || slot == 44 )
+						  return true;
+						result = 0;
+						break;
+					case 1812006:
+						if ( slot == 28 || slot == 37 || slot == 45 )
+						  return true;
+						result = 0;
+						break;
+					case 1812007:
+						if ( slot == 46 || slot == 47 || slot == 48 )
+						  return true;
+						result = 0;
+						break;
+					case 1812008:
+						if ( slot == 57 || slot == 58 || slot == 59 )
+						  return true;
+						result = 0;
+						break;
+					case 1812009:
+						result = slot == 60;
+						break;
+				}
+			default:
+				return false;
+		}
+	}
+}

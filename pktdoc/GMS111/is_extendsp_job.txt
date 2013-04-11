@@ -1,0 +1,7 @@
+//is_extendsp_job
+//Revision 1 : 2012/07/03 by XiaoKia
+
+bool is_extendsp_job(int jobId)
+{
+  return jobId / 1000 == 3 || jobId / 100 == 22 || jobId == 2001 || jobId / 100 == 23 || jobId == 2002;
+}

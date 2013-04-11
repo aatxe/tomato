@@ -1,0 +1,115 @@
+//CLogin::OnSelectCharacterResult
+//Revision 1 : 2012/07/22 by XiaoKia
+
+byte primaryFunction = Decode1();
+byte secondaryFunction = Decode1();
+
+switch (primaryFunction)
+{
+	case 0x06:
+	case 0x08:
+	case 0x09:
+		CLoginUtilDlg::Error("Trouble logging in? Try logging in again from maplestory.nexon.net. Still can't log in? See support options on the website.");
+		break;
+	case 0x02:
+	case 0x03:
+		CLoginUtilDlg::Error("That ID has been deleted or blocked from connection.\r\nPlease check again.");
+		break;
+	case 0x0D:
+		CLoginUtilDlg::Error("Unable to log-on as a master at IP.\r\nPlease check again.");
+		break;
+	case 0x05:
+		CLoginUtilDlg::Error("This is not a registered ID.\r\nPlease try again later.");
+		break;
+	case 0x07:
+		CLogin:GotoTitle(0, 0);
+		CLoginUtilDlg::Error("This is an ID that is already logged in, or the server is under inspection.\r\nPlease check again.");
+		break;
+	case 0x0A:
+		CLoginUtilDlg::Error("Could not be processed due to too many connection requests to the server.\r\nPlease try again later.");
+		break;
+	case 0x0B:
+		CLoginUtilDlg::Error("Only those who are 20 years old or older can use this. Please use another channel.");
+		break;
+	case 0x0E:
+		if (CLoginUtilDlg::YesNo2("You have either selected the wrong gateway, or you have yet to change your personal information."))
+		{
+			open_web_site("http://www.nexon.net/");
+		}
+		break;
+	case 0x0F:
+		CLoginUtilDlg::YesNo2("We're still processing your request at this time, so you don't have access to this game for now.");
+		open_web_site("http://www.nexon.net/");
+		break;
+	case 0x10:
+	case 0x15:
+		CLoginUtilDlg::Error("Please verify your account via email in order to play the game.");
+		break;
+	case 0x11:
+		CLoginUtilDlg::Error("You have either selected the wrong gateway, or you have yet to change your personal information.");
+		break;
+	case 0x19:
+		CLoginUtilDlg::Error("You're logging in from outside of the service region.\r\nTo find out which MapleStory service you should play, please visit www.maplestory.com");
+		break;
+	case 0x26:
+		CLoginUtilDlg::Error("A system error has occoured duringn the identification process.\r\nPlease try again later.");
+		break;
+}
+
+if (primaryFunction == 0x0C)
+{
+	switch (secondaryFunction)
+	{
+		case 0x01:
+			CLogin::GotoTitle(0, 0);
+			CLoginUtilDlg::Error("You have entered an incorrect LOGIN ID.\r\nPlease try again.");
+			break;
+		case 0x02:
+			CLogin::GotoTitle(0, 0);
+			CLoginUtilDlg::Error("You have entered an incorrect form of ID, or your account info hasn't been changed yet.\r\nPlease try again.");
+			break;
+		case 0x03:
+			CLogin::GotoTitle(0, 0);
+			CLoginUtilDlg::Error("This Account has not been verified.\r\nPlease verify your account by following the instructions sent to your registered email address before playing MapleStory.");
+			break;
+		case 0x13:
+			CLogin::GotoTitle(0, 0);
+			CLoginUtilDlg::Error("An error occoured\r\nEither your IP address is unable to connect or you have used up your available game time.");
+			break;
+		case 0x19:
+			CLogin::GotoTitle(0, 0);
+			CLoginUtilDlg::Error("This Account has not been verified.\r\nPlease verify your account by following the instructions sent to your registered email address before playing MapleStory.");
+			break;
+		case 0x1B:
+			CLogin::GotoTitle(0, 0);
+			CLoginUtilDlg::Error("PCqkd vmflaldja wjrdyd eotkddl dkslqslek.\r\n넥슨 PC방 고객센터로 문의 바랍니다."); // Old login dialog background
+			break;
+		case 0x1C:
+			CLogin::GotoTitle(0, 0);
+			CLoginUtilDlg::Error("비정상 접속으로 인해 임시 치안외었습니다.\r\n고객센터(1588-7701)로 문의해주세요.");
+			break;
+		case 0x1F:
+			CLogin::GotoTitle(0, 0);
+			CLoginUtilDlg::Error("비정상 접속으로 인해 임시 치안외었습니다.\r\n고객센터(1588-7701)로 문의해주세요.");
+			break;
+		default:
+			CLoginUtilDlg::Error("Trouble logging in? Try logging in again from maplestory.nexon.net. Still can't log in? See support options on the website.");
+			break;
+	}
+}
+
+if (primaryFunction != 12)
+{
+	if (primaryFunction != 34)
+	{
+		int IPAddress = Decode4();
+		short port = Decode2();
+		int clientID = Decode4();
+		Decode1();
+		Decode4();
+		Decode1();
+		Decode2();
+		Decode2();
+	}
+	return;
+}

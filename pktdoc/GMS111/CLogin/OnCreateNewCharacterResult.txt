@@ -1,0 +1,26 @@
+//CLogin::OnCreateNewCharacterResult
+//Revision 1 : 2012/07/22 by XiaoKia
+
+byte function = Decode1();
+
+switch (function)
+{
+	case 0x0A:
+		CLoginUtilDlg::Error("Could not be processed due to too many connection requests to the server.\r\nPlease try again later.");
+		break;
+	case 0x1A:
+		CUtilDlg::Notice("You cannot create a new character under the account that has requested for a transfer.");
+		break;
+	case 0x1E:
+		CLoginUtilDlg::Error("You cannot use this name.\r\nPlease check again.");
+		break;
+	case 0x29:
+		CLoginUtilDlg::Error("No more characters can be created.\r\nPlease check again.");
+		break;
+	case 0x00:
+		GW_CharacterStat::Decode();
+		AvatarLook::Decode();
+	default:
+		CLoginUtilDlg::Error("Failed due to an unknown reason.\r\nPlease try again later.");
+		break;
+}

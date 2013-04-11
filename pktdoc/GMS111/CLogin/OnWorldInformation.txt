@@ -1,0 +1,42 @@
+//CLogin::OnWorldInformation
+//Revision 1 : 2012/06/26 by XiaoKia
+
+byte serverID = Decode1();
+
+if (serverID >= 0)
+{
+	string worldName = DecodeString();
+	int flag = Decode1();
+	string eventMessage = DecodeString();
+	short eventExpPercent = Decode2();
+	short eventDropPercent = Decode2();
+	Decode1(); // ?
+	
+	for (int channelCount = Decode1(); channelCount > 0; Decode1());
+	{
+		string channelName = DecodeString();
+		int playerLoad = Decode4();
+		Decode1(); // ?
+		byte channelNumber = Decode1();
+		channelCount--;
+	}
+	int j = Decode2();
+	if (j > 0) // u wot m8
+	{
+		for (int i; i < j; i++)
+		{
+			Decode2();
+			Decode2();
+			DecodeString();
+		}
+	}
+	else
+	{
+		Decode4(); // ?
+	}
+}
+else
+{
+	DrawWorldItems();
+	ChangeLoginStep(1);
+}

@@ -1,0 +1,15 @@
+//CLogin::OnCheckUserLimit
+//Revision 1 : 2012/07/02 by XiaoKia
+
+if (userLimitStatus <= 0)
+{
+	CUIChannelSelect::CUIChannelSelect()
+}
+else if (userLimitStatus == 1)
+{
+	CUtilDlg::Notice("World population is currently very high, please be warned that you may encounter dificulties while playing, especially if you have a slow connection.");
+}
+else if (userLimitStatus == 2)
+{
+	CUtilDlg::Notice("The Concurrent Users in This World Have Reached the Max.\r\nPlease Try Again Later.");
+}

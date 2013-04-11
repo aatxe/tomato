@@ -1,0 +1,60 @@
+//GW_CharacterStat::Decode
+//Revision 1 : 2012/07/03 by XiaoKia
+
+uint id = Decode4();
+string name = DecodeBuffer(13);
+byte gender = Decode1();
+byte skinColour = Decode1();
+uint face = Decode4();
+uint hair = Decode4();
+byte[] petSerialNumbers = DecodeBuffer(24); // 3 unique pet Id's; long, long, long
+byte level = Decode1();
+short jobId = Decode2();
+short str = Decode2();
+short dex = Decode2();
+short int = Decode2();
+short luk = Decode2();
+int hp = Decode4();
+int maxHp = Decode4();
+int mp = Decode4();
+int maxMp = Decode4();
+short ap = Decode2();
+if (is_extendsp_job(jobId))
+{
+	ExtendSP::Decode();
+}
+else
+{
+	short sp = Decode2();
+}
+int exp = Decode4();
+int fame = Decode4();
+int gachaponExp = Decode4();
+int mapId = Decode4();
+byte spawnPortalId = Decode1();
+Decode4();
+Decode2();
+if (jobId != 3001 && jobid / 100 != 31)
+{
+	int demonSlayerWings = 0;
+}
+else
+{
+	int demonSlayerWings = Decode4();
+}
+Decode1();
+Decode4();
+Decode4();
+Decode4();
+Decode4();
+Decode4();
+Decode4();
+Decode4();
+DecodeBuffer(12);
+Decode4();
+Decode1();
+Decode4();
+Decode1();
+Decode4();
+FileTime.dwHighDateTime = Decode4();
+FileTime.dwLowDateTime = Decode4();

@@ -1,0 +1,52 @@
+//CLogin::OnDeleteCharacterResult
+//Revision 1 : 2012/07/21 by XiaoKia
+
+int characterID = Decode4();
+byte function = Decode1();
+
+switch (function)
+{
+	case 0x0A:
+		CLoginUtilDlg::Error("Could not be processed due to too many conection requests to the server.\r\nPlease try again later.");
+		break;
+	case 0x16:
+		CLoginUtilDlg::Error("Cannot delete Guild Master Character\r\nPlease disband your guild before deleting.");
+		break;
+	case 0x1D:
+		CLoginUtilDlg::Error("You may not delete a character that has a family.\r\n\r\nPlease remove ties your Seniors and Juniors before deleting the character.");
+		break;
+	case 0x12:
+		CLoginUtilDlg::Error("The 8-digit birthday code you have entered is incorrect.\r\nPlease try again.");
+		break;
+	case 0x14:
+		CLoginUtilDlg::Error("You have entered an incorrect PIC.\r\nPlease try again.");
+		break;
+	case 0x18:
+		CLoginUtilDlg::Error("You may not delete the character that has been engaged and booked for a wedding.");
+		break;
+	case 0x09:
+		CLoginUtilDlg::Error("Failed due to an unknown reason.\r\nPlease try again later.");
+		break;
+	case 0x1A:
+		CUtilDlg::Notice("You cannot delete a character that is currently going through the transfer.");
+		break;
+	case 0x06:
+		CLoginUtilDlg::Error("Trouble logging in? Try logging in again from maplestory.nexon.net. Still can't log in? See our support options on the website.");
+		break;
+	case 0x23:
+		CLoginUtilDlg::Error("현재 일회용 비밀번효(U-OTP) 시스템점검으려 인해 서비스를 이용하실 수 없습니다."); // graphic failure, has hold loginfail background
+		break;
+	case 0x24:
+		CLoginUtilDlg::Error("현재 일회용 비밀번효(U-OTP) 시스템점검으려 인해 서비스를 이용하실 수 없습니다."); // graphic failure, has hold loginfail background
+		break;
+	default:
+		if (!contains character || function > 0) // this doesn't REALLY happen, but nexon's code is lolugly
+		{
+			CMSException("An errorr occoured while communicating with the server.\r\nPlease try again later.");
+			break;
+		}
+		else
+		{
+			delete character
+		}
+}

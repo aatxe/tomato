@@ -1,0 +1,42 @@
+//AvatarLook::Decode
+//Revision 1 : 2012/07/03 by XiaoKia
+
+Decode1();
+Decode1();
+Decode4();
+int jobId = Decode4();
+Decode1(); // not assigned to anything ?
+Decode4();
+for (int i = Decode1(); i != 0xFF; i = Decode1())
+{
+	int itemid = Decode4();
+	if (i <= 0x3D)
+	{
+		if (is_correct_bodypart(itemid, i, 2))
+		{
+			// assign to character
+		}
+	}
+}
+for (int i = Decode1(); i != 0xFF; i = Decode1())
+{
+	int itemid = Decode4();
+	if (i <= 0x3D)
+	{
+		if (is_correct_bodypart(itemid, i, 2))
+		{
+			// assign to character
+		}
+	}
+}
+Decode4();
+Decode1();
+DecodeBuffer(12);
+if (jobId / 100 != 31 && jobId != 3001)
+{
+	int demonSlayerWings = 0;
+}
+else
+{
+	int demonSlayerWings = Decode4();
+}

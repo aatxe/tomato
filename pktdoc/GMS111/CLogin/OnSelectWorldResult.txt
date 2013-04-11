@@ -1,0 +1,86 @@
+//CLogin::OnCheckWorldResult
+//Revision 1 : 2012/07/03 by XiaoKia
+
+int function = Decode1();
+
+CUIChannelSelect::RemoveNoticeConnecting();
+switch (function)
+{
+	case 0x06:
+	case 0x08:
+	case 0x09:
+		CLoginUtilDlg::Error("Trouble logging in? Try logging in again from maplestory.nexon.net. Still can't log in? See support options on the website.");
+		break;
+	case 0x02:
+	case 0x03:
+		CLoginUtilDlg::Error("That ID has been deleted or blocked from connection.\r\nPlease check again.");
+		break;
+	case 0x0D:
+		CLoginUtilDlg::Error("Unable to log-on as a master at IP.\r\nPlease check again.");
+		break;
+	case 0x05:
+		CLoginUtilDlg::Error("This is not a registered ID.\r\nPlease try again later.");
+		break;
+	case 0x07:
+		CLogin:GotoTitle(0, 0);
+		CLoginUtilDlg::Error("This is an ID that is already logged in, or the server is under inspection.\r\nPlease check again.");
+		break;
+	case 0x0A:
+		CLoginUtilDlg::Error("Could not be processed due to too many connection requests to the server.\r\nPlease try again later.");
+		break;
+	case 0x0B:
+		CLoginUtilDlg::Error("Only those who are 20 years old or older can use this. Please use another channel.");
+		break;
+	case 0x0E:
+		if (CLoginUtilDlg::YesNo2("You have either selected the wrong gateway, or you have yet to change your personal information."))
+		{
+			open_web_site("http://www.nexon.net/");
+		}
+		break;
+	case 0x0F:
+		CLoginUtilDlg::YesNo2("We're still processing your request at this time, so you don't have access to this game for now.");
+		open_web_site("http://www.nexon.net/");
+		break;
+	case 0x10:
+	case 0x15:
+		CLoginUtilDlg::Error("Please verify your account via email in order to play the game.");
+		break;
+	case 0x11:
+		CLoginUtilDlg::Error("You have either selected the wrong gateway, or you have yet to change your personal information.");
+		break;
+	case 0x19:
+		CLoginUtilDlg::Error("You're logging in from outside of the service region.\r\nTo find out which MapleStory service you should play, please visit www.maplestory.com");
+		break;
+	case 0x26:
+		CLoginUtilDlg::Error("A system error has occoured duringn the identification process.\r\nPlease try again later.");
+		break;
+	default:
+		break;
+}
+
+if (function == 0x00 && function != 0x0C) // lol?
+{
+	if (function != 0x17) // ??????
+	{
+		uint charCount = Decode1();
+		for (uint i = 0; i < charCount; i++)
+		{
+			GW_CharacterStat::Decode();
+			AvatarLook::Decode();
+			byte viewAllCharacters = Decode1();
+			uint rankingApplicable = Decode1();
+			if (rankingApplicable > 0)
+			{
+				DecodeBuffer(16);
+				//4 bytes : world rank
+				//4 bytes : world rank move
+				//4 bytes : job rank
+				//4 bytes : job rank move
+			}
+		}
+		byte PICSet = Decode1(); //0 = not set, 1 = set
+		byte characterSelectSlots = Decode1();
+		Decode4();
+		Decode4();
+	}
+}

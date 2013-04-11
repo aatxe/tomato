@@ -1,0 +1,6 @@
+//CLogin::OnCheckUserLimit
+//Revision 1 : 2012/07/02 by XiaoKia
+
+int noticeUserLimitStatus = Decode1();
+uint tooltipUserLimitStatus = Decode1(); // 0 = none, 1 = Highly-populated, 2 = Over-Populated
+CUIWorldSelect::UserLimitResult(return, userLimitStatus, worldId);

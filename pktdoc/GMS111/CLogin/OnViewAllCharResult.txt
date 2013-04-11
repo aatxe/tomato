@@ -1,0 +1,55 @@
+//CLogin::OnViewAllCharResult
+//Revision 1 : 2012/07/22 by XiaoKia
+
+byte function = Decode1();
+
+switch (function)
+{
+	case 0x01:
+		int idk1 = Decode4();
+		int idk2 = Decode4();
+		if (idk1 <= 0 || idk2 <= 0)
+			CUtilDlg::Notice("Cannot find any characters.");
+		break;
+	case 0x02:
+		CUtilDlg::Notice("You are already connected to server.");
+		CLogin::GotoTitle(0, 0);
+		break;
+	case 0x03:
+	case 0x06:
+	case 0x07:
+		if (Decode1() > 0) // presumably a boolean for custom error message
+		{
+			string error = DecodeString();
+			CUtilDlg::Notice(error);
+		}
+		else
+		{
+			CUtilDlg::Notice("Unknown Error : View-All-Characters.");
+		}
+		CLogin::GotoTitle(0, 0);
+		break;
+	case 0x04:
+	case 0x05:
+		CUtilDlg::Notice("Cannot find any characters.");
+		break;
+	case 0x00:
+		Decode1();
+		int charCount = Decode1();
+		for (int i = 0; i < charCount; i++)
+		{
+			GW_CharacterStat::Decode();
+			AvatarLook::Decode();
+			int rankings = Decode1();
+			if (rankings > 0)
+			{
+				DecodeBuffer(16);
+			}
+		}
+		Decode1();
+		break;
+	default:
+		CUtilDlg::Notice("ERROR"); // This is an interesting one, the ERROR is explicitly defined, rather than being pulled from the string pool
+		CLogin::GotoTitle(0, 0);
+		break;
+}
