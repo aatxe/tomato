@@ -10,3 +10,4 @@ project as a Maven one, not as a standard Java project.
 * tomato (aaronweiss74), the primary developer.
 * XiaoKia, the packet and MapleStory expert.
 * strax, the Java guru.
+* rice, for lending his name to our Debug UI ;)
